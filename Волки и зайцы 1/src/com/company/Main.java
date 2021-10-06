@@ -16,19 +16,26 @@ public class Main {
         if (N % 2 == 0){
             for (int n =0; n < N; n = n + 2) {
             z1 = z * 3 - v * 10;
-            s = z1 - z + z2;
-            if (s >= 70) v = v + s/70;
+            s = v * 10  + z2;
+            if (s >= 70) {
+                v = v + s / 70;
+                s = 0;
+            }
             z = z1;
             z2 = s;
+
             }
         }else {
             if (N == 1 ) z1 = z * 3;
             for (int n = 1; n < N ; n = n + 2){
                 z1 = (z * 3 - v * 10);
-                s = z1 - z + z2;
+                s = v * 10 + z2;
+                if (s >= 70) {
+                    v = v + s / 70;
+                    s = 0;
+                }
                 z = z1;
                 z2 = s;
-                if (s >= 70) v = v + s/70;
                 z1 = z * 3 ;
             }
         }
