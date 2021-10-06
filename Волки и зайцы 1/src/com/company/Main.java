@@ -8,7 +8,7 @@ public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         int N = scanner.nextInt();
-        int z = 11;
+        int z = 60;
         int v = 2;
         int z1 = 0;
         int s;
@@ -19,7 +19,7 @@ public class Main {
             s = v * 10  + z2;
             if (s >= 70) {
                 v = v + s / 70;
-                s = 0;
+                s = s % 70;
             }
             z = z1;
             z2 = s;
@@ -32,7 +32,7 @@ public class Main {
                 s = v * 10 + z2;
                 if (s >= 70) {
                     v = v + s / 70;
-                    s = 0;
+                    s =s  % 70;
                 }
                 z = z1;
                 z2 = s;
