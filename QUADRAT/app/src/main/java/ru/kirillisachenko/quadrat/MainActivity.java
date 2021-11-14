@@ -31,8 +31,7 @@ public class MainActivity extends AppCompatActivity {
         if (D >= 0 ){
             double x1 = (-b + Math.sqrt(D))/(2*a);
             double x2 = (-b - Math.sqrt(D))/(2*a);
-            Toast.makeText(this, x2 +"", Toast.LENGTH_SHORT).show();
-            Toast.makeText(this, x1 +"", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, x2 +"/n" + x1, Toast.LENGTH_SHORT).show();
         }else Toast.makeText(this, "Нет корней", Toast.LENGTH_SHORT).show();
 
     }
