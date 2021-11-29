@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Pelmeni"
+    android:background="@color/back">
+
+    <TextView
+        android:id="@+id/t"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:textSize="20sp"
+        android:text="Для приготовления домашних пельменей понадобится:
+
+Для теста:
+
+Яйцо — 1 шт;
+
+Вода — 1 ст;
+
+Соль — 0,5 ч л;
+
+Мука — 500 гр;
+
+Для начинки:
+
+Фарш (свинина+говядина) — 700 гр;
+
+Лук репчатый — 1 шт;
+
+Молоко — 50 мл;
+
+Соль — 1 ч л;
+
+Специи для мяса — 1 ч л;
+
+Для бульона:
+
+Вода — 2 л;
+
+Лук репчатый — 1 шт;
+
+Соль — 0,5 ч л;
+
+Лавровый лист — 1 шт;
+Перец черный — 8 горошин. И побольше любви.(Все это можно заменить бабушкой)"
+        />
+
+    <Button
+        android:id="@+id/main_menu"
+        android:layout_width="250dp"
+        android:layout_height="100dp"
+        android:layout_below="@+id/t"
+        android:layout_centerHorizontal="true"
+        android:background="@color/back1"
+        android:hint="Главное меню"
+        android:onClick="onClick"
+
+        />
+
+</RelativeLayout>
