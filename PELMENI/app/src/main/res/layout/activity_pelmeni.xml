@@ -8,6 +8,15 @@
     android:background="@color/back">
 
     <TextView
+        android:id="@+id/name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/back"
+        android:textSize="20sp"
+        />
+
+    <TextView
+        android:layout_below="@+id/name"
         android:id="@+id/t"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

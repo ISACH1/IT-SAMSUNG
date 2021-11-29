@@ -35,6 +35,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
                 String p = password.getText().toString();
                 if (l.equals(log) && p.equals(pass)){
                     Intent prlmeni = new Intent(this, Pelmeni.class);
+                    prlmeni.putExtra("name" , log);
                     startActivity(prlmeni);
                 } else{
                     Toast.makeText(this, "Повторите попытку(пока вы недостойны пельменей)", Toast.LENGTH_SHORT).show();
