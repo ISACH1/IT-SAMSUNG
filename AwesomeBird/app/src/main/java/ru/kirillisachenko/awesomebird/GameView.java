@@ -71,10 +71,10 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
                     if (pipes.isCollision(bird)){
                         running = false;
                         paint.setStyle(Paint.Style.FILL);
-                        paint.setColor(Color.MAGENTA);
-                        paint.setTextSize(80);
+                        paint.setColor(Color.DKGRAY);
+                        paint.setTextSize(160);
                         lose = true;
-                        canvas.drawText(String.valueOf(pipes.getscore()), 100, 300, paint);
+                        canvas.drawText(String.valueOf(pipes.getscore()), getWidth()/2f, 300, paint);
                     }
 
                 }catch (Exception e){}
@@ -92,8 +92,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     }
 
     @Override
-    public void surfaceChanged(@NonNull SurfaceHolder surfaceHolder, int format, int width, int height) {
-    }
+    public void surfaceChanged(@NonNull SurfaceHolder surfaceHolder, int format, int width, int height) {}
 
     @Override
     public void surfaceDestroyed(@NonNull SurfaceHolder surfaceHolder) {

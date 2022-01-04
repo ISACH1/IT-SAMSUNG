@@ -9,7 +9,8 @@
     <color name="white">#FFFFFFFF</color>
     <color name="back">#6DE178</color>
     <color name="text">#DF3F3F</color>
-    <color name="but">#3F51B5</color>
+    <color name="but">#75E499</color>
+    <color name="but1">#E8CB73</color>
 
 
 </resources>
