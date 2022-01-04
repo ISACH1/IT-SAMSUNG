@@ -75,6 +75,9 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
                         paint.setTextSize(160);
                         lose = true;
                         canvas.drawText(String.valueOf(pipes.getscore()), getWidth()/2f, 300, paint);
+                        paint.setColor(Color.RED);
+                        paint.setTextSize(180);
+                        canvas.drawText("GAME OVER", getWidth()/2f - 500, getHeight()/2f, paint);
                     }
 
                 }catch (Exception e){}
@@ -88,6 +91,13 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         bird.fly();
+        if (lose){
+            bird = new BirdModel(getContext(), 200);
+            pipes = new PipesModel(getContext(), getWidth(), getHeight());
+            drawThread = new DrawThread();
+            drawThread.start();
+            lose = false;
+        }
         return super.onTouchEvent(event);
     }
 
