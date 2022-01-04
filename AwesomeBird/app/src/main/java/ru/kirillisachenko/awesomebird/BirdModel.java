@@ -18,7 +18,7 @@ public class BirdModel {
         bird3 = BitmapFactory.decodeResource(context.getResources(), R.drawable.bluebird_3);
     }
     public void fly(){
-        speed = -40;
+        speed = -30;
     }
 
     public void updatePosition(){

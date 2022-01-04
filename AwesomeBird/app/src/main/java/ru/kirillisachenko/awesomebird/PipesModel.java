@@ -10,7 +10,7 @@ public class PipesModel {
     public Bitmap topPipe;
     public Bitmap bottomPipe;
     public float x;
-    private final float xSpeed = 10;
+    private final float xSpeed = 20;
     private int xMax;
     private int yMax;
     private final int spacerSize = 300;
