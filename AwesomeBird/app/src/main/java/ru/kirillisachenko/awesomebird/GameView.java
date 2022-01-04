@@ -71,7 +71,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
                     if (pipes.isCollision(bird)){
                         running = false;
                         paint.setStyle(Paint.Style.FILL);
-                        paint.setColor(Color.DKGRAY);
+                        paint.setColor(Color.YELLOW);
                         paint.setTextSize(160);
                         lose = true;
                         canvas.drawText(String.valueOf(pipes.getscore()), getWidth()/2f, 300, paint);
