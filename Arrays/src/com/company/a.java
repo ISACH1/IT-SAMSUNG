@@ -81,7 +81,9 @@ class MyArrayList<T> implements Iterable<T> {
 
     public boolean contains(T object){
         for(T t : data){
-            if (t.equals(object)){return true;}
+            if (t !=null){
+                if (t.equals(object)){return true;}
+            }
         }return false;
     }
 
