@@ -80,11 +80,7 @@ class MyArrayList<T> implements Iterable<T> {
     }
 
     public boolean contains(T object){
-        for(T t : data){
-            if (t !=null){
-                if (t.equals(object)){return true;}
-            }
-        }return false;
+        return indexOf(object) >=0;
     }
 
     public int indexOf(T t){
