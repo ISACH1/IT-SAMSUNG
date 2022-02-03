@@ -1,0 +1,8 @@
+ru/ivanmurzin/contextintent/BuildConfig.java
+ ru.ivanmurzin.contextintent.BuildConfig
+ru/ivanmurzin/contextintent/MyClass.java
+ ru.ivanmurzin.contextintent.MyClass
+ru/ivanmurzin/contextintent/NotMainActivity.java
+ ru.ivanmurzin.contextintent.NotMainActivity
+ru/ivanmurzin/contextintent/MainActivity.java
+ ru.ivanmurzin.contextintent.MainActivity

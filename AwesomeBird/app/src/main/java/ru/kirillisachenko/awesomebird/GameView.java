@@ -78,6 +78,8 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
                         paint.setColor(Color.RED);
                         paint.setTextSize(180);
                         canvas.drawText("GAME OVER", getWidth()/2f - 500, getHeight()/2f, paint);
+                        paint.setTextSize(100);
+                        canvas.drawText("Tap to restart", getWidth()/2f - 300, getHeight()/2f + 200, paint);
                     }
 
                 }catch (Exception e){}

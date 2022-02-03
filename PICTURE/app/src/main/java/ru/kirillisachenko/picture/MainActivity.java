@@ -37,6 +37,7 @@ public class MainActivity extends AppCompatActivity {
         button.setOnClickListener(v -> {
             Thread myThread = new Thread(new MyThread());
             myThread.start();
+            Toast.makeText(this, "ALALALAL", Toast.LENGTH_SHORT).show();
         });
     }
 
@@ -47,6 +48,8 @@ public class MainActivity extends AppCompatActivity {
                 InputStream inputStream = (InputStream) url.getContent();
                 image.setImageBitmap(BitmapFactory.decodeStream(inputStream));
             } catch (Exception e) {
+                Toast.makeText(MainActivity.this, "Повторите попытку!", Toast.LENGTH_SHORT).show();
+                et.setText("");
             }
         }
     }
@@ -57,5 +60,6 @@ public class MainActivity extends AppCompatActivity {
         public void run() {
             loadImage.load();
         }
+
     }
 }

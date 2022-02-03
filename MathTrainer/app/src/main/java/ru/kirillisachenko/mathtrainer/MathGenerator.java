@@ -20,14 +20,11 @@ public class MathGenerator {
             result = a * b;
             return a + "*" + b;
         } else{
-            double a1 = (double) a;
-            double b1 = (double) b;
-            double result1 = a1 / b1;
-            String s = String.valueOf(result1);
-            int i = Integer.parseInt(String.valueOf(s.charAt(0)));
-            int j = Integer.parseInt(String.valueOf(s.charAt(2)));
-            if (j >= 5)  result = i + 1;
-            else result = (int) i;
+            while (a % b  != 0) {
+                a = getRandom(50,0);
+                b = getRandom(50,0);
+            }
+            result = a /b;
             return a + "/" + b;
         }
     }
