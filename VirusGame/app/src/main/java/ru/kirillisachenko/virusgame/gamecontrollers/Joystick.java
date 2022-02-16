@@ -1,6 +1,9 @@
 package ru.kirillisachenko.virusgame.gamecontrollers;
 
 import android.app.usage.UsageEvents;
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -8,30 +11,27 @@ import android.media.metrics.Event;
 import android.text.method.Touch;
 import android.util.Log;
 
+import ru.kirillisachenko.virusgame.R;
 import ru.kirillisachenko.virusgame.gameobjects.Hero;
 
 public class Joystick {
     private float xB, yB, iRad, oRad, xM, yM, actuatorX, actuatorY;
     private boolean isPressed = false;
-    Paint paint1, paint2;
-    public Joystick(float xB, float yB, float iRad, float oRad){
+    private Bitmap buttonIn, buttonOut;
+    public Joystick(float xB, float yB, float iRad, float oRad, Context context){
         this.xB = xB;
         this.yB = yB;
         this. iRad = iRad;
         this.oRad = oRad;
         this.xM = xB;
         this.yM = yB;
-        paint1 = new Paint();
-        paint2 = new Paint();
-        paint1.setStyle(Paint.Style.FILL_AND_STROKE);
-        paint2.setStyle(Paint.Style.FILL_AND_STROKE);
-        paint1.setColor(Color.GRAY);
-        paint2.setColor(Color.BLACK);
+        buttonIn = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.button_in), (int) iRad, (int) iRad, false);
+        buttonOut = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.button_out), (int) oRad + buttonIn.getWidth()/2, (int) oRad + buttonIn.getHeight()/2, false);
     }
 
     public  void draw(Canvas canvas){
-        canvas.drawCircle(xB, yB, oRad , paint1);
-        canvas.drawCircle(xM, yM, iRad, paint2);
+        canvas.drawBitmap(buttonOut, xB - buttonOut.getWidth()/2, yB - buttonOut.getHeight()/2,  null);
+        canvas.drawBitmap(buttonIn, xM - buttonIn.getWidth()/2, yM - buttonIn.getHeight()/2, null);
         Log.d("RRR", "RISUU JOYSTICK" );
     }
 
@@ -42,7 +42,7 @@ public class Joystick {
 
 
     public boolean isInJoystick(float x, float y ){
-        float distance = (float) Math.sqrt(Math.pow((xB - x), 2) +Math.pow((y - yB), 2));
+        float distance = (float) Math.sqrt(Math.pow((xB - x), 2) + Math.pow((y - yB), 2));
         return distance <= oRad;
     }
 

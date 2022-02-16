@@ -12,6 +12,9 @@ import static org.junit.Assert.*;
 public class ExampleUnitTest {
     @Test
     public void addition_isCorrect() {
-        assertEquals(4, 2 + 2);
+        MathGenerator mathGenerator = new MathGenerator();
+        for (int i = 0; i < 20; i++) {
+            System.out.println(mathGenerator.getRandom(5, 0));
+        }
     }
 }

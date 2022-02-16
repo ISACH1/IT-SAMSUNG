@@ -2,39 +2,37 @@ package ru.kirillisachenko.virusgame;
 
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.Rect;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
-import android.view.animation.Animation;
 
 import androidx.annotation.NonNull;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import io.github.controlwear.virtual.joystick.android.JoystickView;
+import ru.kirillisachenko.virusgame.gamecontrollers.AutoFireButton;
 import ru.kirillisachenko.virusgame.gamecontrollers.Joystick;
-import ru.kirillisachenko.virusgame.gameobjects.Enemy;
+import ru.kirillisachenko.virusgame.gameobjects.GameObject;
+import ru.kirillisachenko.virusgame.gameobjects.PaneDoctor;
 import ru.kirillisachenko.virusgame.gameobjects.Hero;
+import ru.kirillisachenko.virusgame.map.Room1;
 
 public class Game extends SurfaceView implements SurfaceHolder.Callback {
+    AutoFireButton autoFireButton;
+    Room1 room1;
     GameDisplay gameDisplay;
     MathGenerator mathGenerator;
     SurfaceHolder holder;
     Hero hero;
-    Joystick joystick;
-    Bitmap background;
-    Enemy enemy;
-    List<Enemy> enemyArrayList;
-    private int joystickPointerId = 0;
+    Joystick joystick1;
+    ArrayList<PaneDoctor> enemyArrayList;
+    ArrayList<ArrayList<GameObject>> arrayListOfEnemyArrayList;
+    private int joystickPointerId1 = 0;
+    private int autoFireButtonPointerID = 0;
     public Game(Context context) {
         super(context);
         getHolder().addCallback(this);
@@ -42,13 +40,15 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
 
     @Override
     public void surfaceCreated(@NonNull SurfaceHolder holder) {
-        background = BitmapFactory.decodeResource(getResources(), R.drawable.tile1); //TODO: NORMALNIY BSCKGROUND DUREN
-        joystick = new Joystick(300, 1000, 70, 120);
-        hero = new Hero(getContext(), getWidth() / 2, getHeight() / 2);
+        room1 = new Room1(getWidth() / 2, getHeight() / 2, getContext());
+        joystick1 = new Joystick(250,900 - 200, 175, 200, getContext());
+        autoFireButton = new AutoFireButton(getWidth() - 400, 1100 - 225, 185, getContext());
+        hero = new Hero(getContext(), room1.getXPoint(1,1), room1.getYPoint(1,1), joystick1);
         enemyArrayList = new ArrayList<>();
         mathGenerator = new MathGenerator();
-        enemyArrayList.add(new Enemy(0, 0, getContext(), hero ));
-        enemyArrayList.add( new Enemy( getWidth(), getHeight(), getContext(), hero ));
+        enemyArrayList.add(new PaneDoctor(0, 0, getContext(), hero ));
+        enemyArrayList.add(new PaneDoctor(100, 100, getContext(), hero ));
+        enemyArrayList.add( new PaneDoctor(room1.getXPoint(1,5), room1.getYPoint(1, 5), getContext(), hero ));
         this.holder = holder;
         DisplayMetrics displayMetrics = new DisplayMetrics();
         ((Activity) getContext()).getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
@@ -62,31 +62,43 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
     public boolean onTouchEvent(MotionEvent event) {
         switch (event.getActionMasked()) {
             case MotionEvent.ACTION_DOWN:
+                
             case MotionEvent.ACTION_POINTER_DOWN:
-                if (joystick.isPressed()) {
+                if (joystick1.isPressed()) {
                     // Joystick was pressed before this event -> cast spell
-                } else if (joystick.isInJoystick( event.getX(), ( event.getY()))) {
+                    if(autoFireButton.isInButton(event.getX(), event.getY())){
+                        autoFireButtonPointerID = event.getPointerId(event.getActionIndex());
+                        autoFireButton.setPressed(true);
+                    }
+                } else if (joystick1.isInJoystick( event.getX(), ( event.getY()))) {
                     // Joystick is pressed in this event -> setIsPressed(true) and store pointer id
-                    joystickPointerId = event.getPointerId(event.getActionIndex());
-                    joystick.setPressed(true);
+                    joystickPointerId1 = event.getPointerId(event.getActionIndex());
+                    joystick1.setPressed(true);
+                    joystick1.setActuator( event.getX(),  event.getY());
                 } else {
                     // Joystick was not previously, and is not pressed in this event -> cast spell
-
+                    if(autoFireButton.isInButton(event.getX(), event.getY())){
+                        autoFireButton.setPressed(true);
+                        autoFireButtonPointerID = event.getPointerId(event.getActionIndex());
+                    }
                 }
                 return true;
             case MotionEvent.ACTION_MOVE:
-                if (joystick.isPressed()) {
+                if (joystick1.isPressed()) {
                     // Joystick was pressed previously and is now moved
-                    joystick.setActuator( event.getX(),  event.getY());
+                    joystick1.setActuator( event.getX(),  event.getY());
                 }
                 return true;
 
             case MotionEvent.ACTION_UP:
             case MotionEvent.ACTION_POINTER_UP:
-                if (joystickPointerId == event.getPointerId(event.getActionIndex())) {
+                if (joystickPointerId1 == event.getPointerId(event.getActionIndex())) {
                     // joystick pointer was let go off -> setIsPressed(false) and resetActuator()
-                    joystick.setPressed(false);
-                    joystick.resetActuator();
+                    joystick1.setPressed(false);
+                    joystick1.resetActuator();
+                }
+                if(autoFireButtonPointerID == event.getPointerId(event.getActionIndex())){
+                    autoFireButton.setPressed(false);
                 }
                 return true;
         }
@@ -102,7 +114,7 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
         public void run() {
             while (running){
                 Canvas canvas = holder.lockCanvas();
-                canvas.drawBitmap(background, null , new Rect(0, 0, getWidth(), getHeight()), null);
+
                 try {
                     drawFrames(canvas, gameDisplay);
                     update();
@@ -126,18 +138,20 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
 
 
     public void update(){
-        joystick.update();
-        hero.update(joystick);
-        for (Enemy e: enemyArrayList){
+        joystick1.update();
+        hero.update();
+        for (PaneDoctor e: enemyArrayList){
             e.update();
         }
         gameDisplay.update();
     }
 
     public void drawFrames(Canvas canvas, GameDisplay gameDisplay){
+        room1.draw(canvas, gameDisplay);
         hero.draw(canvas, gameDisplay);
-        joystick.draw(canvas);
-        for (Enemy e: enemyArrayList){
+        joystick1.draw(canvas);
+        autoFireButton.draw(canvas);
+        for (PaneDoctor e: enemyArrayList){
             e.draw(canvas, gameDisplay);
         }
         Log.d("RRR", "RISUU FRAMES");

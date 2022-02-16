@@ -7,7 +7,7 @@ import ru.kirillisachenko.virusgame.GameDisplay;
 import ru.kirillisachenko.virusgame.gamecontrollers.Joystick;
 
 public abstract class GameObject {
-    private float xPosition;
+    private  float xPosition;
     private float yPosition;
 
 
@@ -18,7 +18,7 @@ public abstract class GameObject {
 
     public abstract void update();
 
-    public abstract void update(Joystick joystick);
+
 
 
 
