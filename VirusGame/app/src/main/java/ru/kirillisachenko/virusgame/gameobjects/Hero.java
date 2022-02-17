@@ -67,15 +67,12 @@ public class Hero extends GameObject{
         if(xSpeed == 0) canvas.drawBitmap(lastHeroModel,  gameDisplay.gameToDisplayCoordinatesX(xPosition - lastHeroModel.getWidth()/2), gameDisplay.gameToDisplayCoordinatesY(yPosition - lastHeroModel.getHeight()/2), null);
     }
 
-    public GameObject findEnemy(ArrayList<ArrayList<GameObject>> arrayListOfEnemyArrayList){
-        GameObject target = arrayListOfEnemyArrayList.get(0).get(0);
-        for (ArrayList<GameObject> arrayList: arrayListOfEnemyArrayList) {
-            for(GameObject enemy : arrayList){
-                if(mathGenerator.DeltaDistance(xPosition, enemy.getxPosition(), yPosition, enemy.getyPosition()) < mathGenerator.DeltaDistance(xPosition, target.getxPosition(), yPosition, target.getyPosition())) {
-                    target = enemy;
-                }
-            }
-        } return target;
+    public GameObject findEnemy(ArrayList<GameObject> enemies){
+        GameObject target = enemies.get(0);
+        for (GameObject enemy: enemies) {
+            if (mathGenerator.DeltaDistance(xPosition, enemy.getxPosition(), yPosition, enemy.getyPosition()) < mathGenerator.DeltaDistance(xPosition, target.getxPosition(), yPosition, target.getyPosition()) ) target = enemy;
+        }
+        return target;
     }
 
     public float getyPosition() {
