@@ -6,10 +6,11 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.util.Log;
 
+import java.util.ArrayList;
+
 import ru.kirillisachenko.virusgame.GameDisplay;
 import ru.kirillisachenko.virusgame.MathGenerator;
 import ru.kirillisachenko.virusgame.R;
-import ru.kirillisachenko.virusgame.gamecontrollers.Joystick;
 
 public class PaneDoctor extends GameObject{
     MathGenerator mathGenerator = new MathGenerator();
@@ -53,6 +54,15 @@ public class PaneDoctor extends GameObject{
     yPosition += ySpeed;
     }
 
+    @Override
+    public Bullet attack() {
+        return null;
+    }
+
+    @Override
+    public Bullet attack(ArrayList<GameObject> enemies) {
+        return null;
+    }
 
 
     @Override

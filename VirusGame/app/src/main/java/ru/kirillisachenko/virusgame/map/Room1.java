@@ -13,7 +13,7 @@ import ru.kirillisachenko.virusgame.R;
 public class Room1 {
     MathGenerator mathGenerator;
     private Tile tiles [] [] = new Tile[100][100];
-    private Bitmap tile1, tile2, tile3, tile4;
+    private Bitmap tile1, tile2, tile3, tile4, wall;
     private float xPosition;
     private float yPosition;
     Context context;
@@ -26,6 +26,7 @@ public class Room1 {
         tile2 = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.tile2),40, 40, false );
         tile3 = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.tile3),40, 40, false );
         tile4 = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.tile4),40, 40, false );
+        wall = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.wall),40, 40, false );
         for (int i = 0; i < 100 ; i++) {
             for (int j = 0; j < 100 ; j++) {
                 int tile = mathGenerator.getRandom(5, 0);
@@ -33,6 +34,8 @@ public class Room1 {
                 if (tile == 2) tiles [i] [j] = new Tile(xPosition + j * 40, yPosition + i * 40, tile2);
                 if (tile == 3) tiles [i] [j] = new Tile(xPosition + j * 40, yPosition + i * 40, tile3);
                 if (tile == 4) tiles [i] [j] = new Tile(xPosition + j * 40, yPosition + i * 40, tile4);
+                if (i == 0 || i == 99) { tiles [i] [j] = new Tile(xPosition + j * 40, yPosition + i * 40, wall);}
+                if (j == 0 || j == 99){ tiles [i] [j] = new Tile(xPosition + j * 40, yPosition + i * 40, wall);}
             }
         }
     }

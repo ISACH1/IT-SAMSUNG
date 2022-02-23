@@ -1,18 +1,12 @@
 package ru.kirillisachenko.virusgame.gamecontrollers;
 
-import android.app.usage.UsageEvents;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
-import android.media.metrics.Event;
-import android.text.method.Touch;
 import android.util.Log;
 
 import ru.kirillisachenko.virusgame.R;
-import ru.kirillisachenko.virusgame.gameobjects.Hero;
 
 public class Joystick {
     private float xB, yB, iRad, oRad, xM, yM, actuatorX, actuatorY;

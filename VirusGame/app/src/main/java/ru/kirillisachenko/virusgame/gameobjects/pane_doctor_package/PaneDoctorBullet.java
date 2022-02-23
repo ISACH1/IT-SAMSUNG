@@ -1,0 +1,24 @@
+package ru.kirillisachenko.virusgame.gameobjects.pane_doctor_package;
+
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+
+import ru.kirillisachenko.virusgame.GameDisplay;
+import ru.kirillisachenko.virusgame.R;
+import ru.kirillisachenko.virusgame.gameobjects.Bullet;
+
+public class PaneDoctorBullet extends Bullet {
+    public PaneDoctorBullet(float xPosition, float yPosition, float xSpeed, float ySpeed, float bulletSpeed, Context context) {
+        super(xPosition, yPosition, xSpeed, ySpeed, bulletSpeed, context);
+        Model = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.pane_doctor_bullet), 50, 50, false);
+    }
+
+
+
+    @Override
+    public int getSize() {
+        return 50;
+    }
+}

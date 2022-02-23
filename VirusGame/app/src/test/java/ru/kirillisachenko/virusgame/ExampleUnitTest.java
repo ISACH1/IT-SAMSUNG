@@ -2,8 +2,6 @@ package ru.kirillisachenko.virusgame;
 
 import org.junit.Test;
 
-import static org.junit.Assert.*;
-
 /**
  * Example local unit test, which will execute on the development machine (host).
  *
@@ -17,4 +15,6 @@ public class ExampleUnitTest {
             System.out.println(mathGenerator.getRandom(5, 0));
         }
     }
+
+
 }
