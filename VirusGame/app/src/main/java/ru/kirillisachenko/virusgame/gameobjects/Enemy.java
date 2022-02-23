@@ -1,69 +1,44 @@
 package ru.kirillisachenko.virusgame.gameobjects;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
-import android.util.Log;
 
-import ru.kirillisachenko.virusgame.GameDisplay;
+import java.util.ArrayList;
+
 import ru.kirillisachenko.virusgame.MathGenerator;
-import ru.kirillisachenko.virusgame.R;
-import ru.kirillisachenko.virusgame.gamecontrollers.Joystick;
+import ru.kirillisachenko.virusgame.gameobjects.heropackage.Hero;
 
-public class Enemy extends GameObject{
-    MathGenerator mathGenerator = new MathGenerator();
-    private int rotation;
-    Hero hero;
-    Bitmap paneDoctor1, paneDoctor2;
-    Context context;
-    private float xPosition, yPosition;
+public abstract class Enemy extends GameObject{
+    protected MathGenerator mathGenerator;
+    protected  Hero hero;
+    protected  Context context;
+    protected   float speed;
+    protected float attackRange;
 
-    private  float speed = 1.5F;
-    private float xSpeed, ySpeed;
-
-    public Enemy(float xPosition, float yPosition, Context context, Hero hero){
+    public Enemy(float xPosition, float yPosition, Context context, Hero hero) {
         super(xPosition, yPosition);
-        paneDoctor1 = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.pane_doctor1), 150, 150, false);
-        paneDoctor2 = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.pane_doctor2), 150, 150, false);
         this.hero = hero;
+        this.context = context;
+        mathGenerator = new MathGenerator();
     }
 
+    public void update(){
+        float distance = mathGenerator.DeltaDistance(hero.getxPosition(), xPosition, hero.getyPosition(), yPosition);
+        float deltaX = hero.getxPosition() - xPosition;
+        float deltaY = hero.getyPosition() - yPosition;
+        if (distance > 0) {
+            xSpeed = deltaX / distance * speed;
+            ySpeed = deltaY / distance * speed;
+        } else{
+            xSpeed = ySpeed = 0;
+        }
+        xPosition += xSpeed;
+        yPosition += ySpeed;
 
-
-
-
+    }
+    public abstract Bullet attack();
 
     @Override
-    public void update() {
-        Log.d("RRRR", "OBNOVILSYA");
-    float distance = mathGenerator.DeltaDistance(hero.getxPosition(), xPosition, hero.getyPosition(), yPosition);
-    float deltaX = hero.getxPosition() - xPosition;
-    float deltaY = hero.getyPosition() - yPosition;
-    if (distance > 0) {
-        xSpeed = deltaX / distance * speed;
-        ySpeed = deltaY / distance * speed;
-    } else{
-        xSpeed = ySpeed = 0;
-    }
-    xPosition += xSpeed;
-    yPosition += ySpeed;
-    }
-
-    @Override
-    public void update(Joystick joystick) {
-    }
-
-    @Override
-    public void draw(Canvas canvas) {
-
-    }
-
-    @Override
-    public void draw(Canvas canvas, GameDisplay gameDisplay) {
-        Log.d("RRRR", "ENEMY RISUET");
-        if (xSpeed > 0)  canvas.drawBitmap(paneDoctor1, gameDisplay.gameToDisplayCoordinatesX(xPosition), gameDisplay.gameToDisplayCoordinatesY(yPosition), null);
-        if (xSpeed < 0)  canvas.drawBitmap(paneDoctor2, gameDisplay.gameToDisplayCoordinatesX(xPosition), gameDisplay.gameToDisplayCoordinatesY(yPosition), null);
-        if (xSpeed == 0)  canvas.drawBitmap(paneDoctor2, gameDisplay.gameToDisplayCoordinatesX(xPosition), gameDisplay.gameToDisplayCoordinatesY(yPosition), null);
+    public boolean canAttack() {
+        return mathGenerator.DeltaDistance(hero.getxPosition(), xPosition, hero.getyPosition(), yPosition) <= attackRange && (System.currentTimeMillis() - lastAttack) >= attackSpeed;
     }
 }

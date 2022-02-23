@@ -27,17 +27,7 @@ public class DoctorBullet extends Bullet {
     }
 
     @Override
-    public void update() {
-
-    }
-
-    @Override
-    public void draw(Canvas canvas, GameDisplay gameDisplay) {
-
-    }
-
-    @Override
     public int getSize() {
-        return 0;
+        return Model.getWidth();
     }
 }

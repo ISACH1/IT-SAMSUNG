@@ -15,35 +15,37 @@ public abstract class GameObject {
     protected float yPosition;
     protected int healthPoint;
     protected int maxHealthPoint;
-
-
+   protected   long lastAttack  = 0;
+   protected   long  attackSpeed ;
+    protected Bitmap Model1, Model2, lastModel;
+    protected float xSpeed, ySpeed;
 
     public GameObject(float  xPosition, float yPosition){
         this.xPosition = xPosition;
         this.yPosition = yPosition;
     }
 
-    public abstract void update();
-
-
-
-    public abstract Bullet attack();
-    public abstract Bullet attack(ArrayList<GameObject> enemies);
-
-
     public float getxPosition() {
         return xPosition ;
     }
 
-    public abstract boolean canAttack();
+    public  boolean canAttack(){
+        return (System.currentTimeMillis() - lastAttack) >= attackSpeed;
+    }
 
-    public abstract void draw(Canvas canvas, GameDisplay gameDisplay);
+    public  void draw(Canvas canvas, GameDisplay gameDisplay){
+        if (xSpeed > 0) { canvas.drawBitmap(Model1, gameDisplay.gameToDisplayCoordinatesX(xPosition - Model1.getWidth()/2), gameDisplay.gameToDisplayCoordinatesY(yPosition - Model1.getHeight()/2), null); lastModel = Model1;}
+        if (xSpeed < 0)  {canvas.drawBitmap(Model2, gameDisplay.gameToDisplayCoordinatesX(xPosition - Model2.getWidth()/2), gameDisplay.gameToDisplayCoordinatesY(yPosition - Model2.getHeight()/2), null); lastModel = Model2;}
+        if (xSpeed == 0)  {canvas.drawBitmap(lastModel, gameDisplay.gameToDisplayCoordinatesX(xPosition - lastModel.getWidth()/2), gameDisplay.gameToDisplayCoordinatesY(yPosition - lastModel.getHeight()/2), null);}
+    }
 
     public float getyPosition() {
         return yPosition ;
     }
 
-    public abstract int getSize();
+    public  int getSize(){
+        return Model1.getWidth();
+    }
 
     public int getHealthPoint(){
         return healthPoint;

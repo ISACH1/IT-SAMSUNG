@@ -18,7 +18,9 @@ import ru.kirillisachenko.virusgame.gamecontrollers.Button;
 import ru.kirillisachenko.virusgame.gamecontrollers.HealthBar;
 import ru.kirillisachenko.virusgame.gamecontrollers.Joystick;
 import ru.kirillisachenko.virusgame.gameobjects.Bullet;
+import ru.kirillisachenko.virusgame.gameobjects.Enemy;
 import ru.kirillisachenko.virusgame.gameobjects.GameObject;
+import ru.kirillisachenko.virusgame.gameobjects.doctor_package.Doctor;
 import ru.kirillisachenko.virusgame.gameobjects.pane_doctor_package.PaneDoctor;
 import ru.kirillisachenko.virusgame.gameobjects.heropackage.Hero;
 import ru.kirillisachenko.virusgame.map.Room1;
@@ -32,7 +34,7 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
     SurfaceHolder holder;
     Hero hero;
     Joystick joystick1;
-    ArrayList<GameObject> enemyArrayList;
+    ArrayList<Enemy> enemyArrayList;
     ArrayList <Bullet> heroBullets;
     ArrayList <Bullet> enemyBullets;
 
@@ -59,8 +61,9 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
         heroBullets = new ArrayList<>();
         enemyBullets = new ArrayList<>();
         mathGenerator = new MathGenerator();
-        for (int i = 0; i <8 ; i++) {
+        for (int i = 0; i < 3 ; i++) {
             enemyArrayList.add(new PaneDoctor(room1.getXPoint(mathGenerator.getRandom(0, 100), mathGenerator.getRandom(0, 100)), room1.getYPoint(mathGenerator.getRandom(0, 100), mathGenerator.getRandom(0, 100)), getContext(), hero));
+            enemyArrayList.add(new Doctor(room1.getXPoint(mathGenerator.getRandom(0, 100), mathGenerator.getRandom(0, 100)), room1.getYPoint(mathGenerator.getRandom(0, 100), mathGenerator.getRandom(0, 100)), getContext(), hero));
         }
         this.holder = holder;
         DisplayMetrics displayMetrics = new DisplayMetrics();
@@ -212,15 +215,15 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
             if (room1.getXPoint(1, 1) >= bullet.getxPosition() - bullet.getSize() || room1.getYPoint(1, 1) >= bullet.getyPosition() - bullet.getSize()
                 || room1.getXPoint(98, 98) <= bullet.getxPosition() - bullet.getSize() || room1.getYPoint(98, 98) <= bullet.getyPosition() - bullet.getSize()) enemyBullets.remove(bullet);
         }
-        for (GameObject e: enemyArrayList){
+        for (Enemy e: enemyArrayList){
             e.update();
             if (e.canAttack()){
                 enemyBullets.add(e.attack());
             }
         }
-        ListIterator<GameObject> EnemyListIterator = enemyArrayList.listIterator();
+        ListIterator<Enemy> EnemyListIterator = enemyArrayList.listIterator();
         while (EnemyListIterator.hasNext()){
-            GameObject enemy = EnemyListIterator.next();
+            Enemy enemy = EnemyListIterator.next();
             if (enemy.getHealthPoint() == 0){
                 enemyArrayList.remove(enemy);
             }
@@ -254,7 +257,7 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
         AutoFireButton.draw(canvas);
         AbilityButton.draw(canvas);
         healthBar.draw(canvas);
-        for (GameObject e: enemyArrayList){
+        for (Enemy e: enemyArrayList){
             e.draw(canvas, gameDisplay);
         }
         for (Bullet bullet : heroBullets){
