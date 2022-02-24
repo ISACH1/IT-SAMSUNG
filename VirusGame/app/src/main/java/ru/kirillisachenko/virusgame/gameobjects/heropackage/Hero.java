@@ -20,7 +20,7 @@ public class Hero extends GameObject {
     MathGenerator mathGenerator;
     Joystick joystick;
     Context context;
-    private static float bulletSpeed = 15f;
+    private static float bulletSpeed = 17f;
     private static float speed = 10f;
 
 

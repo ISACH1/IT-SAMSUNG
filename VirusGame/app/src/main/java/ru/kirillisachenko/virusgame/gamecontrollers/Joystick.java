@@ -26,7 +26,6 @@ public class Joystick {
     public  void draw(Canvas canvas){
         canvas.drawBitmap(buttonOut, xB - buttonOut.getWidth()/2, yB - buttonOut.getHeight()/2,  null);
         canvas.drawBitmap(buttonIn, xM - buttonIn.getWidth()/2, yM - buttonIn.getHeight()/2, null);
-        Log.d("RRR", "RISUU JOYSTICK" );
     }
 
     public void update(){

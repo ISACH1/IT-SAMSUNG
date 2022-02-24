@@ -15,20 +15,20 @@ import java.util.ArrayList;
 import java.util.ListIterator;
 
 import ru.kirillisachenko.virusgame.gamecontrollers.Button;
+import ru.kirillisachenko.virusgame.gamecontrollers.EnemySpawner;
 import ru.kirillisachenko.virusgame.gamecontrollers.HealthBar;
 import ru.kirillisachenko.virusgame.gamecontrollers.Joystick;
 import ru.kirillisachenko.virusgame.gameobjects.Bullet;
 import ru.kirillisachenko.virusgame.gameobjects.Enemy;
-import ru.kirillisachenko.virusgame.gameobjects.GameObject;
 import ru.kirillisachenko.virusgame.gameobjects.doctor_package.Doctor;
 import ru.kirillisachenko.virusgame.gameobjects.pane_doctor_package.PaneDoctor;
 import ru.kirillisachenko.virusgame.gameobjects.heropackage.Hero;
-import ru.kirillisachenko.virusgame.map.Room1;
+import ru.kirillisachenko.virusgame.map.Room;
 
 public class Game extends SurfaceView implements SurfaceHolder.Callback {
     HealthBar healthBar;
     Button AutoFireButton, AbilityButton;
-    Room1 room1;
+    Room room;
     GameDisplay gameDisplay;
     MathGenerator mathGenerator;
     SurfaceHolder holder;
@@ -37,6 +37,7 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
     ArrayList<Enemy> enemyArrayList;
     ArrayList <Bullet> heroBullets;
     ArrayList <Bullet> enemyBullets;
+    EnemySpawner enemySpawner;
 
 
     private int joystickPointerId1 = 0;
@@ -51,20 +52,17 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
 
     @Override
     public void surfaceCreated(@NonNull SurfaceHolder holder) {
-        room1 = new Room1(getWidth() / 2, getHeight() / 2, getContext());
+        room = new Room(getWidth() / 2, getHeight() / 2, getContext());
         joystick1 = new Joystick( getWidth() - (getWidth() - 250), getHeight() - 225, 175, 200, getContext());
         AutoFireButton = new Button(getWidth() - 400, getHeight() - 150, 185, getContext(), 0);
         AbilityButton = new Button(getWidth() - 200, getHeight() - 300, 185, getContext(), 1) ;
-        hero = new Hero(getContext(), room1.getXPoint(40, 40), room1.getYPoint(40, 40), joystick1);
+        hero = new Hero(getContext(), room.getXPoint(40, 40), room.getYPoint(40, 40), joystick1);
          healthBar = new HealthBar(0, 0, getContext(), hero);
         enemyArrayList = new ArrayList<>();
         heroBullets = new ArrayList<>();
         enemyBullets = new ArrayList<>();
         mathGenerator = new MathGenerator();
-        for (int i = 0; i < 3 ; i++) {
-            enemyArrayList.add(new PaneDoctor(room1.getXPoint(mathGenerator.getRandom(0, 100), mathGenerator.getRandom(0, 100)), room1.getYPoint(mathGenerator.getRandom(0, 100), mathGenerator.getRandom(0, 100)), getContext(), hero));
-            enemyArrayList.add(new Doctor(room1.getXPoint(mathGenerator.getRandom(0, 100), mathGenerator.getRandom(0, 100)), room1.getYPoint(mathGenerator.getRandom(0, 100), mathGenerator.getRandom(0, 100)), getContext(), hero));
-        }
+         enemySpawner = new EnemySpawner(enemyArrayList, getContext(), hero);
         this.holder = holder;
         DisplayMetrics displayMetrics = new DisplayMetrics();
         ((Activity) getContext()).getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
@@ -120,7 +118,6 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
                 count++;
                 return true;
             case MotionEvent.ACTION_MOVE:
-                Log.d("RRR###", "MOVE");
                     if (joystick1.isPressed()) {
                         float x = event.getX();
                         float y = event.getY();
@@ -137,8 +134,6 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
                         // Joystick was pressed previously and is now moved
                         joystick1.setActuator(x, y);
                     }
-
-
 
                 return true;
 
@@ -165,7 +160,6 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
 
     private  class GameThread extends Thread {
         private volatile boolean running = true;
-
         @Override
         public void run() {
             while (running){
@@ -190,14 +184,10 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
 
     }
 
-
-
-
     public void update(){
-
+        enemySpawner.update();
         joystick1.update();
         hero.update();
-
         if (AutoFireButton.isPressed()){
             if(hero.canAttack()) {
                 if (!enemyArrayList.isEmpty()){
@@ -207,13 +197,13 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
         }
         for (Bullet bullet : heroBullets ){
             bullet.update();
-            if (room1.getXPoint(1, 1) >= bullet.getxPosition() - bullet.getSize() || room1.getYPoint(1, 1) >= bullet.getyPosition() - bullet.getSize()
-                    || room1.getXPoint(98, 98) <= bullet.getxPosition() - bullet.getSize() || room1.getYPoint(98, 98) <= bullet.getyPosition() - bullet.getSize()) enemyBullets.remove(bullet);
+            if (room.getXPoint(1, 1) >= bullet.getxPosition() - bullet.getSize() || room.getYPoint(1, 1) >= bullet.getyPosition() - bullet.getSize()
+                    || room.getXPoint(98, 98) <= bullet.getxPosition() - bullet.getSize() || room.getYPoint(98, 98) <= bullet.getyPosition() - bullet.getSize()) enemyBullets.remove(bullet);
         }
         for (Bullet bullet : enemyBullets ){
             bullet.update();
-            if (room1.getXPoint(1, 1) >= bullet.getxPosition() - bullet.getSize() || room1.getYPoint(1, 1) >= bullet.getyPosition() - bullet.getSize()
-                || room1.getXPoint(98, 98) <= bullet.getxPosition() - bullet.getSize() || room1.getYPoint(98, 98) <= bullet.getyPosition() - bullet.getSize()) enemyBullets.remove(bullet);
+            if (room.getXPoint(1, 1) >= bullet.getxPosition() - bullet.getSize() || room.getYPoint(1, 1) >= bullet.getyPosition() - bullet.getSize()
+                || room.getXPoint(98, 98) <= bullet.getxPosition() - bullet.getSize() || room.getYPoint(98, 98) <= bullet.getyPosition() - bullet.getSize()) enemyBullets.remove(bullet);
         }
         for (Enemy e: enemyArrayList){
             e.update();
@@ -251,7 +241,7 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
     }
 
     public void drawFrames(Canvas canvas, GameDisplay gameDisplay){
-        room1.draw(canvas, gameDisplay);
+        room.draw(canvas, gameDisplay);
         hero.draw(canvas, gameDisplay);
         joystick1.draw(canvas);
         AutoFireButton.draw(canvas);
@@ -266,9 +256,5 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
         for (Bullet bullet : enemyBullets){
             bullet.draw(canvas, gameDisplay);
         }
-
-        Log.d("RRR", "RISUU FRAMES");
     }
-
-
 }

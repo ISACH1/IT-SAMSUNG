@@ -13,4 +13,11 @@ public class MathGenerator {
             random = (int) (Math.random() * (max - min) + min);
         return random;
     }
+
+    public char getRandomSign() {
+        double a = getRandom(3, 0); // 1 2
+        if (a == 1){
+            return '+';
+        } return '-';
+    }
 }

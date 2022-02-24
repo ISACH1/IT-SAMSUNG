@@ -27,7 +27,7 @@ public class PaneDoctor extends Enemy {
         Model2 = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.pane_doctor2), 150, 150,  false);
         lastModel = Model1;
         healthPoint = maxHealthPoint = 3;
-        speed = 1.5f;
+        speed = 2f;
         this.attackSpeed = 5000;
         attackRange = 900;
     }

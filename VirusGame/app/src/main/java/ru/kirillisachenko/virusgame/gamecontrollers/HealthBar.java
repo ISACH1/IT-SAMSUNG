@@ -25,7 +25,6 @@ public class HealthBar {
     public void update(){
         fullCount =  hero.getHealthPoint();
         emptyCount = hero.getMaxHealthPoint() - hero.getHealthPoint();
-        Log.d("HEALTH", String.valueOf(hero.getMaxHealthPoint()));
     }
 
     public void draw(Canvas canvas){

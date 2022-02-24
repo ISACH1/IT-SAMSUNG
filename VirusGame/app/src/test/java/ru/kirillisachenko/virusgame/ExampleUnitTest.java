@@ -10,10 +10,14 @@ import org.junit.Test;
 public class ExampleUnitTest {
     @Test
     public void addition_isCorrect() {
+        int b = 0;
         MathGenerator mathGenerator = new MathGenerator();
-        for (int i = 0; i < 20; i++) {
-            System.out.println(mathGenerator.getRandom(5, 0));
+        for (int i = 0; i < 40; i++) {
+            int a = mathGenerator.getRandom(11, -1);
+            if ( a > 4) b++;
+            System.out.println(a);
         }
+        System.out.println(b);
     }
 
 
