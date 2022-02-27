@@ -7,21 +7,22 @@ import android.graphics.Canvas;
 import android.util.Log;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import ru.kirillisachenko.virusgame.GameDisplay;
 import ru.kirillisachenko.virusgame.MathGenerator;
 import ru.kirillisachenko.virusgame.R;
 import ru.kirillisachenko.virusgame.gamecontrollers.Joystick;
+import ru.kirillisachenko.virusgame.gameobjects.Boss;
 import ru.kirillisachenko.virusgame.gameobjects.Bullet;
 import ru.kirillisachenko.virusgame.gameobjects.Enemy;
 import ru.kirillisachenko.virusgame.gameobjects.GameObject;
 
-public class Hero extends GameObject {
+public abstract class Hero extends GameObject {
     MathGenerator mathGenerator;
     Joystick joystick;
     Context context;
-    private static float bulletSpeed = 17f;
-    private static float speed = 10f;
+    protected   float bulletSpeed;
 
 
 
@@ -46,10 +47,6 @@ public class Hero extends GameObject {
         yPosition += ySpeed;
     }
 
-
-
-
-
     public Bullet attack(ArrayList<Enemy> enemies) {
         GameObject target = findEnemy(enemies);
         Log.d("TARGET", String.valueOf(target));
@@ -60,8 +57,16 @@ public class Hero extends GameObject {
         return new HeroBullet(xPosition, yPosition, bulletXSpeed, bulletYSpeed, bulletSpeed, context);
     }
 
+    public Bullet attackBoss(ArrayList<Boss> bosses) {
+        GameObject target = findEnemy(bosses);
+        float distance = mathGenerator.DeltaDistance(target.getxPosition(), xPosition, target.getyPosition(), yPosition);
+        float bulletXSpeed = (target.getxPosition() - xPosition) / distance;
+        float bulletYSpeed = (target.getyPosition() - yPosition) / distance;
+        lastAttack = System.currentTimeMillis();
+        return new HeroBullet(xPosition, yPosition, bulletXSpeed, bulletYSpeed, bulletSpeed, context);
+    }
 
-    public GameObject findEnemy(ArrayList<Enemy> enemies){
+    protected GameObject findEnemy(ArrayList<Enemy> enemies){
         GameObject target = enemies.get(0);
         for (GameObject enemy: enemies) {
             if (mathGenerator.DeltaDistance( enemy.getxPosition(),xPosition,  enemy.getyPosition(), yPosition)
@@ -69,4 +74,17 @@ public class Hero extends GameObject {
         }
         return target;
     }
+
+    protected GameObject findEnemy(List<Boss> enemies){
+        GameObject target = enemies.get(0);
+        for (GameObject enemy: enemies) {
+            if (mathGenerator.DeltaDistance( enemy.getxPosition(),xPosition,  enemy.getyPosition(), yPosition)
+                    < mathGenerator.DeltaDistance( target.getxPosition(), xPosition,  target.getyPosition(),yPosition) ) target = enemy;
+        }
+        return target;
+    }
+
+    public abstract void castAbility();
+
+
 }

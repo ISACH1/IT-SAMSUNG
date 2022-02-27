@@ -30,6 +30,7 @@ public class Doctor extends Enemy {
         this.speed = 3f;
         this.attackSpeed = 4000;
         attackRange = 1200;
+        minDistance = 300;
     }
 
 

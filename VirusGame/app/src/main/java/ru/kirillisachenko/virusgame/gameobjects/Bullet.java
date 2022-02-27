@@ -44,13 +44,15 @@ public abstract class Bullet {
     public float getBulletSpeed() {
         return bulletSpeed;
     }
-    public abstract int getSize();
+    public  int getSize(){
+        return Model.getWidth();
+    };
 
     public void setBulletSpeed(float bulletSpeed) {
         this.bulletSpeed = bulletSpeed;
     }
     public boolean Collision(Bullet bullet, GameObject gameObject){
-        float distance = mathGenerator.DeltaDistance( gameObject.getxPosition() - gameObject.getSize()/2, bullet.getxPosition() - bullet.getSize()/2,  gameObject.getyPosition() - gameObject.getSize()/2, bullet.getyPosition() - bullet.getSize()/2);
+        float distance = mathGenerator.DeltaDistance( gameObject.getxPosition() , bullet.getxPosition() ,  gameObject.getyPosition() , bullet.getyPosition() );
         float distanceToTouch = (bullet.getSize() + gameObject.getSize())/2;
         return distance <= distanceToTouch;
     }

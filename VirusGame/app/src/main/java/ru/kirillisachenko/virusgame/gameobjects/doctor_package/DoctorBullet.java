@@ -26,8 +26,4 @@ public class DoctorBullet extends Bullet {
         }
     }
 
-    @Override
-    public int getSize() {
-        return Model.getWidth();
-    }
 }

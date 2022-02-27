@@ -11,6 +11,7 @@ import ru.kirillisachenko.virusgame.MathGenerator;
 import ru.kirillisachenko.virusgame.gameobjects.heropackage.Hero;
 
 public abstract class GameObject {
+    MathGenerator mathGenerator;
     protected   float xPosition;
     protected float yPosition;
     protected int healthPoint;
@@ -19,10 +20,13 @@ public abstract class GameObject {
    protected   long  attackSpeed ;
     protected Bitmap Model1, Model2, lastModel;
     protected float xSpeed, ySpeed;
+    protected   float speed;
+    protected boolean collision = false;
 
     public GameObject(float  xPosition, float yPosition){
         this.xPosition = xPosition;
         this.yPosition = yPosition;
+         mathGenerator= new MathGenerator();
     }
 
     public float getxPosition() {
@@ -69,5 +73,23 @@ public abstract class GameObject {
             return;
         }
         this.maxHealthPoint = 0;
+    }
+
+    public boolean Collision(GameObject gameObject){
+        float distance = mathGenerator.DeltaDistance( xPosition , gameObject.getxPosition() ,  yPosition , gameObject.getyPosition() );
+        float distanceToTouch = (getSize() + gameObject.getSize())/2;
+        if (distance <= distanceToTouch) {
+            collision = true;
+            return distance <= distanceToTouch;
+        } collision = false;
+        return false;
+    }
+
+    public void setxSpeed(float xSpeed) {
+        this.xSpeed = xSpeed * speed;
+    }
+
+    public void setySpeed(float ySpeed) {
+        this.ySpeed = ySpeed * speed;
     }
 }

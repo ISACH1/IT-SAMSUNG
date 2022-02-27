@@ -14,11 +14,4 @@ public class PaneDoctorBullet extends Bullet {
         super(xPosition, yPosition, xSpeed, ySpeed, bulletSpeed, context);
         Model = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.pane_doctor_bullet), 50, 50, false);
     }
-
-
-
-    @Override
-    public int getSize() {
-        return 50;
-    }
 }

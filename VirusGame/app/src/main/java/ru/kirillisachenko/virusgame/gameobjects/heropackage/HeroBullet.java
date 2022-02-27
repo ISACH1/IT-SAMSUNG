@@ -12,31 +12,8 @@ import ru.kirillisachenko.virusgame.R;
 import ru.kirillisachenko.virusgame.gameobjects.Bullet;
 
 public class HeroBullet extends Bullet {
-    Bitmap bullet;
-
-
     public HeroBullet(float xPosition, float yPosition, float xSpeed, float ySpeed, float bulletSpeed, Context context) {
         super(xPosition, yPosition, xSpeed, ySpeed, bulletSpeed, context);
-        bullet = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.hero_classic_bullet ), 50, 50, false);
+        Model = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.hero_classic_bullet ), 50, 50, false);
     }
-
-
-    @Override
-    public void update() {
-        xPosition += xSpeed;
-        yPosition += ySpeed;
-    }
-
-    @Override
-    public void draw(Canvas canvas, GameDisplay gameDisplay) {
-        canvas.drawBitmap(bullet, gameDisplay.gameToDisplayCoordinatesX(xPosition - bullet.getWidth()/2), gameDisplay.gameToDisplayCoordinatesY(yPosition - bullet.getHeight()/2), null);
-    }
-
-    @Override
-    public int getSize() {
-        return 50;
-    }
-
-
-
 }

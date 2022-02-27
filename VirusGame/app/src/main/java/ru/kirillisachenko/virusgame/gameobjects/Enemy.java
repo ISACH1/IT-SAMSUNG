@@ -11,8 +11,8 @@ public abstract class Enemy extends GameObject{
     protected MathGenerator mathGenerator;
     protected  Hero hero;
     protected  Context context;
-    protected   float speed;
     protected float attackRange;
+    protected float minDistance;
 
     public Enemy(float xPosition, float yPosition, Context context, Hero hero) {
         super(xPosition, yPosition);
@@ -22,14 +22,16 @@ public abstract class Enemy extends GameObject{
     }
 
     public void update(){
-        float distance = mathGenerator.DeltaDistance(hero.getxPosition(), xPosition, hero.getyPosition(), yPosition);
-        float deltaX = hero.getxPosition() - xPosition;
-        float deltaY = hero.getyPosition() - yPosition;
-        if (distance > 0) {
-            xSpeed = deltaX / distance * speed;
-            ySpeed = deltaY / distance * speed;
-        } else{
-            xSpeed = ySpeed = 0;
+        if(!collision) {
+            float distance = mathGenerator.DeltaDistance(hero.getxPosition(), xPosition, hero.getyPosition(), yPosition);
+            float deltaX = hero.getxPosition() - xPosition;
+            float deltaY = hero.getyPosition() - yPosition;
+            if (distance > minDistance) {
+                xSpeed = deltaX / distance * speed;
+                ySpeed = deltaY / distance * speed;
+            } else {
+                xSpeed = ySpeed = 0;
+            }
         }
         xPosition += xSpeed;
         yPosition += ySpeed;
