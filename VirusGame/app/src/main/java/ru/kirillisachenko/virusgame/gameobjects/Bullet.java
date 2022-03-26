@@ -11,16 +11,17 @@ public abstract class Bullet {
     protected MathGenerator mathGenerator;
     protected Bitmap Model;
     protected   float xPosition, yPosition, xSpeed, ySpeed, bulletSpeed;
+    protected double damage;
 
 
-    public Bullet(float xPosition, float yPosition, float xSpeed, float ySpeed, float bulletSpeed, Context context){
+    public Bullet(float xPosition, float yPosition, float xSpeed, float ySpeed, float bulletSpeed, Context context, double damage){
         mathGenerator = new MathGenerator();
         this.xPosition = xPosition;
         this.yPosition = yPosition;
         this.bulletSpeed = bulletSpeed;
         this.xSpeed = xSpeed * bulletSpeed;
         this.ySpeed = ySpeed * bulletSpeed;
-
+        this.damage = damage;
     }
 
 
@@ -57,5 +58,15 @@ public abstract class Bullet {
         return distance <= distanceToTouch;
     }
 
+    public double getDamage() {
+        return damage;
+    }
 
+    public float getxSpeed() {
+        return xSpeed;
+    }
+
+    public float getySpeed() {
+        return ySpeed;
+    }
 }

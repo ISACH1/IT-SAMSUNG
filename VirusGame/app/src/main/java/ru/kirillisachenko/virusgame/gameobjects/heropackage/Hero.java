@@ -23,21 +23,21 @@ public abstract class Hero extends GameObject {
     Joystick joystick;
     Context context;
     protected   float bulletSpeed;
+    protected long lastCast;
+    protected long AbilityKD;
+    protected float maxAttackSpeed;
+
 
 
 
     public Hero(Context context, float xPosition, float yPosition, Joystick joystick ) {
         super(xPosition, yPosition);
-        Model1 = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.virus1), 150,150,false);
-        Model2 = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.virus2), 150,150,false);
-        lastModel = Model1;
         this.joystick = joystick;
         mathGenerator = new MathGenerator();
         this.context = context;
         lastAttack = 0;
-        attackSpeed = 2000;
-        setMaxHealthPoint(5);
-        setHealthPoint(5);
+        lastCast = 0;
+        maxAttackSpeed = 500;
     }
 
     public void update() {
@@ -49,12 +49,11 @@ public abstract class Hero extends GameObject {
 
     public Bullet attack(ArrayList<Enemy> enemies) {
         GameObject target = findEnemy(enemies);
-        Log.d("TARGET", String.valueOf(target));
         float distance = mathGenerator.DeltaDistance(target.getxPosition(), xPosition, target.getyPosition(), yPosition);
         float bulletXSpeed = (target.getxPosition() - xPosition) / distance;
         float bulletYSpeed = (target.getyPosition() - yPosition) / distance;
         lastAttack = System.currentTimeMillis();
-        return new HeroBullet(xPosition, yPosition, bulletXSpeed, bulletYSpeed, bulletSpeed, context);
+        return new HeroBullet(xPosition, yPosition, bulletXSpeed, bulletYSpeed, bulletSpeed, context, damage);
     }
 
     public Bullet attackBoss(ArrayList<Boss> bosses) {
@@ -63,7 +62,7 @@ public abstract class Hero extends GameObject {
         float bulletXSpeed = (target.getxPosition() - xPosition) / distance;
         float bulletYSpeed = (target.getyPosition() - yPosition) / distance;
         lastAttack = System.currentTimeMillis();
-        return new HeroBullet(xPosition, yPosition, bulletXSpeed, bulletYSpeed, bulletSpeed, context);
+        return new HeroBullet(xPosition, yPosition, bulletXSpeed, bulletYSpeed, bulletSpeed, context, damage);
     }
 
     protected GameObject findEnemy(ArrayList<Enemy> enemies){
@@ -84,7 +83,11 @@ public abstract class Hero extends GameObject {
         return target;
     }
 
-    public abstract void castAbility();
 
+    public boolean canCast(){
+        return (System.currentTimeMillis() - lastCast) >= AbilityKD;
+    }
+
+    public abstract void castAbility();
 
 }

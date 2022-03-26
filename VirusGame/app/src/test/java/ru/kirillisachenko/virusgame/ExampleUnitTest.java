@@ -13,11 +13,9 @@ public class ExampleUnitTest {
         int b = 0;
         MathGenerator mathGenerator = new MathGenerator();
         for (int i = 0; i < 40; i++) {
-            int a = mathGenerator.getRandom(11, -1);
-            if ( a > 4) b++;
+            int a = mathGenerator.getRandom(3, 0);
             System.out.println(a);
         }
-        System.out.println(b);
     }
 
 

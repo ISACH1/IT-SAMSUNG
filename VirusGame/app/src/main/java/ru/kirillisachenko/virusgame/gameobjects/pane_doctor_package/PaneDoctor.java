@@ -19,26 +19,26 @@ import ru.kirillisachenko.virusgame.gameobjects.heropackage.Hero;
 public class PaneDoctor extends Enemy {
     protected float bulletSpeed = 8f;
 
-    public PaneDoctor(float xPosition, float yPosition, Context context, Hero hero) {
-        super(xPosition, yPosition, context, hero);
-        Model1 = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.pane_doctor1), 150, 150,  false);
-        Model2 = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.pane_doctor2), 150, 150,  false);
-        lastModel = Model1;
+    public PaneDoctor(float xPosition, float yPosition, Context context, Hero hero, boolean dropItem) {
+        super(xPosition, yPosition, context, hero, dropItem);
+        Model[0] = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.pane_doctor1), 150, 150,  false);
+        Model[1] = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.pane_doctor2), 150, 150,  false);
+        Model[2] = Model[0];
         healthPoint = maxHealthPoint = 3;
         speed = 2f;
         this.attackSpeed = 5000;
         attackRange = 900;
-        minDistance = 300;
+        minDistance = 400;
+        damage = 1;
     }
 
 
     @Override
     public Bullet attack() {
-        float distance = mathGenerator.DeltaDistance(hero.getxPosition(), xPosition, hero.getyPosition(), yPosition);
-        float bulletXSpeed = (hero.getxPosition() - xPosition) / distance;
-        float bulletYSpeed = (hero.getyPosition() - yPosition) / distance;
+        float bulletXSpeed = getBulletXSpeed();
+        float bulletYSpeed = getBulletYSpeed();
         lastAttack = System.currentTimeMillis();
-        return new PaneDoctorBullet(xPosition, yPosition, bulletXSpeed, bulletYSpeed, bulletSpeed, context);
+        return new PaneDoctorBullet(xPosition, yPosition, bulletXSpeed, bulletYSpeed, bulletSpeed, context, damage);
     }
 
 

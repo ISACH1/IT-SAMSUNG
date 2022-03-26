@@ -11,7 +11,7 @@ import ru.kirillisachenko.virusgame.gameobjects.heropackage.Hero;
 
 public class HealthBar {
     Hero hero;
-    private int fullCount, emptyCount;
+    private double fullCount, emptyCount;
     private Bitmap healthBar, emptyHealthBar;
     private float xPosition, yPosition, lastXPosition, newLastXPosition;
     public HealthBar(float xPosition, float yPosition, Context context, Hero hero){

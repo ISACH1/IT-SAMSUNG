@@ -10,8 +10,9 @@ import ru.kirillisachenko.virusgame.R;
 import ru.kirillisachenko.virusgame.gameobjects.Bullet;
 
 public class PaneDoctorBullet extends Bullet {
-    public PaneDoctorBullet(float xPosition, float yPosition, float xSpeed, float ySpeed, float bulletSpeed, Context context) {
-        super(xPosition, yPosition, xSpeed, ySpeed, bulletSpeed, context);
+
+    public PaneDoctorBullet(float xPosition, float yPosition, float xSpeed, float ySpeed, float bulletSpeed, Context context, double damage) {
+        super(xPosition, yPosition, xSpeed, ySpeed, bulletSpeed, context, damage);
         Model = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.pane_doctor_bullet), 50, 50, false);
     }
 }

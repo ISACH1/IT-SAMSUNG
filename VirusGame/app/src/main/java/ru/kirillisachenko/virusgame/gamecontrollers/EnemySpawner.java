@@ -6,6 +6,7 @@ import java.util.ArrayList;
 
 import ru.kirillisachenko.virusgame.MathGenerator;
 import ru.kirillisachenko.virusgame.gameobjects.Boss;
+import ru.kirillisachenko.virusgame.gameobjects.Bullet;
 import ru.kirillisachenko.virusgame.gameobjects.Enemy;
 import ru.kirillisachenko.virusgame.gameobjects.Jam_package.Jam;
 import ru.kirillisachenko.virusgame.gameobjects.doctor_package.Doctor;
@@ -13,21 +14,25 @@ import ru.kirillisachenko.virusgame.gameobjects.heropackage.Hero;
 import ru.kirillisachenko.virusgame.gameobjects.pane_doctor_package.PaneDoctor;
 
 public class EnemySpawner {
-    MathGenerator mathGenerator;
-    ArrayList<Enemy> enemyArrayList;
-    ArrayList<Boss> bosses;
+   private MathGenerator mathGenerator;
+   private ArrayList<Enemy> enemyArrayList;
+   private ArrayList<Boss> bosses;
     private int waveNumber = 1;
     private int BossWaveNumber = 1;
     private  int numberOfBosses = 1;
     private int numberOfEnemies = 4;
-    Context context;
-    Hero hero;
-    public EnemySpawner(ArrayList<Enemy> enemyArrayList, Context context, Hero hero, ArrayList<Boss> bosses){
+    private boolean item;
+    private Context context;
+    private Hero hero;
+    private ArrayList<Bullet> bullets;
+    public EnemySpawner(ArrayList<Enemy> enemyArrayList, Context context, Hero hero, ArrayList<Boss> bosses, ArrayList<Bullet> bullets){
         this.enemyArrayList = enemyArrayList;
         this.context = context;
         this.hero = hero;
         mathGenerator = new MathGenerator();
         this.bosses = bosses;
+        this.bullets = bullets;
+        item = true;
     }
 
 
@@ -41,17 +46,26 @@ public class EnemySpawner {
         if((waveNumber % 4) != 0) {
             for (int i = 0; i < numberOfEnemies; i++) {
                 int type = mathGenerator.getRandom(101, -1);
-                if (type > 40)
-                    enemyArrayList.add(new PaneDoctor(getRandomCoordinate(hero.getxPosition()), getRandomCoordinate(hero.getyPosition()), context, hero));
-                if (type <= 40)
-                    enemyArrayList.add(new Doctor(getRandomCoordinate(hero.getxPosition()), getRandomCoordinate(hero.getyPosition()), context, hero));
+                if(item) {
+                    if (type > 40)
+                        enemyArrayList.add(new PaneDoctor(getRandomCoordinate(hero.getxPosition()), getRandomCoordinate(hero.getyPosition()), context, hero, item));
+                    if (type <= 40)
+                        enemyArrayList.add(new Doctor(getRandomCoordinate(hero.getxPosition()), getRandomCoordinate(hero.getyPosition()), context, hero, item));
+                } else{
+                    if (type > 40)
+                        enemyArrayList.add(new PaneDoctor(getRandomCoordinate(hero.getxPosition()), getRandomCoordinate(hero.getyPosition()), context, hero, mathGenerator.getRandom(101, -1) <= 30));
+                    if (type <= 40)
+                        enemyArrayList.add(new Doctor(getRandomCoordinate(hero.getxPosition()), getRandomCoordinate(hero.getyPosition()), context, hero, mathGenerator.getRandom(101, -1) <= 30));
+                }
+                item = false;
             }
         }else  {
             for (int i = 0; i < numberOfBosses; i++) {
-                bosses.add(new Jam(getRandomCoordinate(hero.getxPosition()), getRandomCoordinate(hero.getyPosition()), context, hero));
+                bosses.add(new Jam(getRandomCoordinate(hero.getxPosition()), getRandomCoordinate(hero.getyPosition()), context, hero, bullets, true));
                 BossWaveNumber++;
             }
         }
+        item = true;
         waveNumber++;
         numberOfEnemies+=2;
     }

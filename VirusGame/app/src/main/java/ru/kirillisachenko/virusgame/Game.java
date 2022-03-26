@@ -14,6 +14,8 @@ import androidx.annotation.NonNull;
 import java.util.ArrayList;
 import java.util.ListIterator;
 
+import ru.kirillisachenko.virusgame.gameItems.HealthUp;
+import ru.kirillisachenko.virusgame.gameItems.Item;
 import ru.kirillisachenko.virusgame.gamecontrollers.Button;
 import ru.kirillisachenko.virusgame.gamecontrollers.EnemySpawner;
 import ru.kirillisachenko.virusgame.gamecontrollers.HealthBar;
@@ -21,35 +23,30 @@ import ru.kirillisachenko.virusgame.gamecontrollers.Joystick;
 import ru.kirillisachenko.virusgame.gameobjects.Boss;
 import ru.kirillisachenko.virusgame.gameobjects.Bullet;
 import ru.kirillisachenko.virusgame.gameobjects.Enemy;
-import ru.kirillisachenko.virusgame.gameobjects.Jam_package.Jam;
-import ru.kirillisachenko.virusgame.gameobjects.doctor_package.Doctor;
 import ru.kirillisachenko.virusgame.gameobjects.heropackage.ClassicVirus;
-import ru.kirillisachenko.virusgame.gameobjects.pane_doctor_package.PaneDoctor;
 import ru.kirillisachenko.virusgame.gameobjects.heropackage.Hero;
 import ru.kirillisachenko.virusgame.map.Room;
 
 public class Game extends SurfaceView implements SurfaceHolder.Callback {
-    float a = 2;
-    HealthBar healthBar;
-    Button AutoFireButton, AbilityButton;
-    Room room;
-    GameDisplay gameDisplay;
-    MathGenerator mathGenerator;
-    SurfaceHolder holder;
-    Hero hero;
-    Joystick joystick1;
-    ArrayList<Boss> boss;
-    ArrayList<Enemy> enemyArrayList;
-    ArrayList <Bullet> heroBullets;
-    ArrayList <Bullet> enemyBullets;
-    EnemySpawner enemySpawner;
-    GameThread gameThread;
-
-
+    private HealthBar healthBar;
+    private Button AutoFireButton, AbilityButton;
+    private Room room;
+    private GameDisplay gameDisplay;
+    private MathGenerator mathGenerator;
+    private SurfaceHolder holder;
+    private Hero hero;
+    private Joystick joystick1;
+    private ArrayList<Boss> boss;
+    private ArrayList<Enemy> enemyArrayList;
+    private ArrayList <Bullet> heroBullets;
+    private ArrayList <Bullet> enemyBullets;
+    private ArrayList<Item> itemArrayList;
+    private EnemySpawner enemySpawner;
+    private GameThread gameThread;
     private int joystickPointerId1 = 0;
     private int autoFireButtonPointerID = 0;
     private int AbilityButtonID = 0;
-    private  static int  count = 0;
+    private  int TouchCount = 0;
 
     public Game(Context context) {
         super(context);
@@ -58,18 +55,19 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
 
     @Override
     public void surfaceCreated(@NonNull SurfaceHolder holder) {
-        room = new Room(getWidth() / 2, getHeight() / 2, getContext());
+        mathGenerator = new MathGenerator();
+        room = new Room(getWidth(), getHeight(), getContext());
         joystick1 = new Joystick( getWidth() - (getWidth() - 250), getHeight() - 225, 175, 200, getContext());
         AutoFireButton = new Button(getWidth() - 400, getHeight() - 150, 185, getContext(), 0);
         AbilityButton = new Button(getWidth() - 200, getHeight() - 300, 185, getContext(), 1) ;
-        hero = new ClassicVirus(getContext(), room.getXPoint(40, 40), room.getYPoint(40, 40), joystick1);
+        hero = new ClassicVirus(getContext(), room.getXPoint(50, 50), room.getYPoint(50, 50), joystick1);
          healthBar = new HealthBar(0, 0, getContext(), hero);
          boss = new ArrayList<>();
         enemyArrayList = new ArrayList<>();
         heroBullets = new ArrayList<>();
         enemyBullets = new ArrayList<>();
-        mathGenerator = new MathGenerator();
-         enemySpawner = new EnemySpawner(enemyArrayList, getContext(), hero, boss);
+        itemArrayList = new ArrayList<>();
+         enemySpawner = new EnemySpawner(enemyArrayList, getContext(), hero, boss, enemyBullets);
         this.holder = holder;
         DisplayMetrics displayMetrics = new DisplayMetrics();
         ((Activity) getContext()).getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
@@ -122,13 +120,13 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
                         AbilityButton.setPressed(true);
                     }
                 }
-                count++;
+                TouchCount++;
                 return true;
             case MotionEvent.ACTION_MOVE:
                     if (joystick1.isPressed()) {
                         float x = event.getX();
                         float y = event.getY();
-                        if(count>1){
+                        if(TouchCount >1){
                             int i1 = event.findPointerIndex(event.getPointerId(0));
                             int i2 = event.findPointerIndex(event.getPointerId(1));
                             x = event.getX(i1);
@@ -158,7 +156,7 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
                     AbilityButton.setPressed(false);
                 }
 
-                count--;
+                TouchCount--;
                 return true;
         }
 
@@ -212,6 +210,11 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
                 }
             }
         }
+        if (AbilityButton.isPressed()){
+            if(hero.canCast()){
+                hero.castAbility();
+            }
+        }
         for (Bullet bullet : heroBullets ){
             bullet.update();
             if (room.getXPoint(1, 1) >= bullet.getxPosition() - bullet.getSize() || room.getYPoint(1, 1) >= bullet.getyPosition() - bullet.getSize()
@@ -227,35 +230,15 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
             if (e.canAttack()){
                 enemyBullets.add(e.attack());
             }
-            for (Enemy enemy : enemyArrayList) {
-                if (!e.equals(enemy)){
-                    if(e.Collision(enemy)){
-                        Log.d("Collision", "DA");
-                        if(e.getxPosition() > enemy.getxPosition()){
-                            e.setxSpeed(a);
-                            enemy.setxSpeed(-a);
-                        }
-                        if(e.getxPosition() < enemy.getxPosition()){
-                            e.setxSpeed(-a);
-                            enemy.setxSpeed(a);
-                        }if(e.getyPosition() > enemy.getyPosition()){
-                            e.setySpeed(a);
-                            enemy.setySpeed(-a);
-                        }
-                        if(e.getyPosition() < enemy.getyPosition()){
-                            e.setySpeed(-a);
-                            enemy.setySpeed(a);
-                        }
-                        break;
-                    }
-                    //TODO: Сделать столкновение и отход монстров в стороны
-                }
-            }
+
         }
         for (Boss boss : boss){
             boss.update();
             if(boss.canAttack()){
-                enemyBullets.addAll(boss.Attack());
+                boss.Attack();
+            }
+            for (Item item : itemArrayList) {
+                item.update();
             }
         }
 
@@ -263,6 +246,9 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
         while (EnemyListIterator.hasNext()){
             Enemy enemy = EnemyListIterator.next();
             if (enemy.getHealthPoint() == 0){
+                if(enemy.die() != null){
+                    itemArrayList.add(enemy.die());
+                }
                 enemyArrayList.remove(enemy);
             }
             ListIterator<Bullet> HeroBulletIterator = heroBullets.listIterator();
@@ -270,7 +256,7 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
                 Bullet heroBullet = HeroBulletIterator.next();
                 if (heroBullet.Collision(heroBullet, enemy )){
                     heroBullets.remove(heroBullet);
-                    enemy.setHealthPoint(enemy.getHealthPoint() - 1);
+                    enemy.takeDamage(hero.getDamage());
                     break;
                 }
             }
@@ -280,13 +266,14 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
             Boss boss1 = BossIterator.next();
             if (boss1.getHealthPoint() == 0){
                 boss.remove(boss1);
+                itemArrayList.add(boss1.die());
             }
             ListIterator<Bullet> HeroBulletIterator = heroBullets.listIterator();
             while (HeroBulletIterator.hasNext()){
                 Bullet heroBullet = HeroBulletIterator.next();
                 if (heroBullet.Collision(heroBullet, boss1 )){
                     heroBullets.remove(heroBullet);
-                    boss1.setHealthPoint(boss1.getHealthPoint() - 1);
+                    boss1.takeDamage(heroBullet.getDamage());
                     break;
                 }
             }
@@ -295,12 +282,15 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
         ListIterator<Bullet> EnemyBulletIterator = enemyBullets.listIterator();
         while (EnemyBulletIterator.hasNext()){
             Bullet enemyBullet = EnemyBulletIterator.next();
-            Log.d("Bulets", String.valueOf(enemyBullet));
             if (enemyBullet.Collision(enemyBullet, hero )){
                 enemyBullets.remove(enemyBullet);
-                hero.setHealthPoint(hero.getHealthPoint() - 1);
+                hero.takeDamage(enemyBullet.getDamage());
                 break;
             }
+        }
+        for (Item item : itemArrayList) {
+            item.update();
+            if(item.isNeedToRemove()) itemArrayList.remove(item);
         }
         healthBar.update();
         gameDisplay.update();
@@ -309,10 +299,7 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
     public void drawFrames(Canvas canvas, GameDisplay gameDisplay){
         room.draw(canvas, gameDisplay);
         hero.draw(canvas, gameDisplay);
-        joystick1.draw(canvas);
-        AutoFireButton.draw(canvas);
-        AbilityButton.draw(canvas);
-        healthBar.draw(canvas);
+
         for (Enemy e: enemyArrayList){
             e.draw(canvas, gameDisplay);
         }
@@ -325,5 +312,10 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
         for (Boss b: boss){
             b.draw(canvas, gameDisplay);
         }
+        for(Item item: itemArrayList) item.draw(canvas, gameDisplay);
+        joystick1.draw(canvas);
+        AutoFireButton.draw(canvas);
+        AbilityButton.draw(canvas);
+        healthBar.draw(canvas);
     }
 }

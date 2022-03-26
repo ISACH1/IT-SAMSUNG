@@ -1,32 +1,30 @@
 package ru.kirillisachenko.virusgame.gameobjects;
 
-import android.content.Context;
+
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-
-import java.util.ArrayList;
-
 import ru.kirillisachenko.virusgame.GameDisplay;
 import ru.kirillisachenko.virusgame.MathGenerator;
-import ru.kirillisachenko.virusgame.gameobjects.heropackage.Hero;
 
 public abstract class GameObject {
     MathGenerator mathGenerator;
     protected   float xPosition;
     protected float yPosition;
-    protected int healthPoint;
-    protected int maxHealthPoint;
+    protected double healthPoint;
+    protected double maxHealthPoint;
    protected   long lastAttack  = 0;
    protected   long  attackSpeed ;
-    protected Bitmap Model1, Model2, lastModel;
+    protected Bitmap Model [];
     protected float xSpeed, ySpeed;
     protected   float speed;
-    protected boolean collision = false;
+    protected int armor;
+    protected double damage;
 
     public GameObject(float  xPosition, float yPosition){
         this.xPosition = xPosition;
         this.yPosition = yPosition;
-         mathGenerator= new MathGenerator();
+        mathGenerator= new MathGenerator();
+        Model  = new Bitmap[3];
     }
 
     public float getxPosition() {
@@ -38,9 +36,9 @@ public abstract class GameObject {
     }
 
     public  void draw(Canvas canvas, GameDisplay gameDisplay){
-        if (xSpeed > 0) { canvas.drawBitmap(Model1, gameDisplay.gameToDisplayCoordinatesX(xPosition - Model1.getWidth()/2), gameDisplay.gameToDisplayCoordinatesY(yPosition - Model1.getHeight()/2), null); lastModel = Model1;}
-        if (xSpeed < 0)  {canvas.drawBitmap(Model2, gameDisplay.gameToDisplayCoordinatesX(xPosition - Model2.getWidth()/2), gameDisplay.gameToDisplayCoordinatesY(yPosition - Model2.getHeight()/2), null); lastModel = Model2;}
-        if (xSpeed == 0)  {canvas.drawBitmap(lastModel, gameDisplay.gameToDisplayCoordinatesX(xPosition - lastModel.getWidth()/2), gameDisplay.gameToDisplayCoordinatesY(yPosition - lastModel.getHeight()/2), null);}
+        if (xSpeed > 0) { canvas.drawBitmap(Model[0], gameDisplay.gameToDisplayCoordinatesX(xPosition - Model[0].getWidth()/2), gameDisplay.gameToDisplayCoordinatesY(yPosition - Model[0].getHeight()/2), null); Model[2] = Model[0];}
+        if (xSpeed < 0)  {canvas.drawBitmap(Model[1], gameDisplay.gameToDisplayCoordinatesX(xPosition - Model[1].getWidth()/2), gameDisplay.gameToDisplayCoordinatesY(yPosition - Model[1].getHeight()/2), null); Model[2] = Model[1];}
+        if (xSpeed == 0)  {canvas.drawBitmap(Model[2], gameDisplay.gameToDisplayCoordinatesX(xPosition - Model[2].getWidth()/2), gameDisplay.gameToDisplayCoordinatesY(yPosition - Model[2].getHeight()/2), null);}
     }
 
     public float getyPosition() {
@@ -48,26 +46,30 @@ public abstract class GameObject {
     }
 
     public  int getSize(){
-        return Model1.getWidth();
+        return Model[0].getWidth();
     }
 
-    public int getHealthPoint(){
+    public double getHealthPoint(){
         return healthPoint;
     }
 
-    public void setHealthPoint(int healthPoint) {
-        if ( healthPoint > 0) {
-            this.healthPoint = healthPoint;
+    public void setHealthPoint(double health) {
+        if (health >= maxHealthPoint){
+            this.healthPoint = maxHealthPoint;
+            return;
+        }
+        if ( health > 0) {
+            this.healthPoint = health;
             return;
         }
         this.healthPoint = 0;
     }
 
-    public int getMaxHealthPoint() {
+    public double getMaxHealthPoint() {
         return maxHealthPoint;
     }
 
-    public void setMaxHealthPoint(int maxHealthPoint) {
+    public void setMaxHealthPoint(double maxHealthPoint) {
         if (maxHealthPoint > 0) {
             this.maxHealthPoint = maxHealthPoint;
             return;
@@ -75,14 +77,12 @@ public abstract class GameObject {
         this.maxHealthPoint = 0;
     }
 
-    public boolean Collision(GameObject gameObject){
-        float distance = mathGenerator.DeltaDistance( xPosition , gameObject.getxPosition() ,  yPosition , gameObject.getyPosition() );
-        float distanceToTouch = (getSize() + gameObject.getSize())/2;
-        if (distance <= distanceToTouch) {
-            collision = true;
-            return distance <= distanceToTouch;
-        } collision = false;
-        return false;
+
+
+    public void takeDamage(double damage){
+        if(armor == 0) {
+            setHealthPoint(getHealthPoint() - damage);
+        }
     }
 
     public void setxSpeed(float xSpeed) {
@@ -91,5 +91,29 @@ public abstract class GameObject {
 
     public void setySpeed(float ySpeed) {
         this.ySpeed = ySpeed * speed;
+    }
+
+    public void setArmor(int armor) {
+        this.armor = armor;
+    }
+
+    public int getArmor() {
+        return armor;
+    }
+
+    public double getDamage() {
+        return damage;
+    }
+
+    public void setAttackSpeed(long attackSpeed) {
+        this.attackSpeed = attackSpeed;
+    }
+
+    public long getAttackSpeed() {
+        return attackSpeed;
+    }
+
+    public void setDamage(double damage) {
+        this.damage = damage;
     }
 }

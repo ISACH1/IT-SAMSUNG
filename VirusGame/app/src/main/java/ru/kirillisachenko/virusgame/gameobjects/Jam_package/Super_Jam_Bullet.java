@@ -7,10 +7,9 @@ import android.graphics.BitmapFactory;
 import ru.kirillisachenko.virusgame.R;
 import ru.kirillisachenko.virusgame.gameobjects.Bullet;
 
-public class Jam_bullet extends Bullet {
-
-    public Jam_bullet(float xPosition, float yPosition, float xSpeed, float ySpeed, float bulletSpeed, Context context, double damage) {
+public class Super_Jam_Bullet extends Bullet {
+    public Super_Jam_Bullet(float xPosition, float yPosition, float xSpeed, float ySpeed, float bulletSpeed, Context context, double damage) {
         super(xPosition, yPosition, xSpeed, ySpeed, bulletSpeed, context, damage);
-        Model = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.jam_bullet_1), 50, 50, false );
+        Model = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.jam_bullet_1), 100, 100, false );
     }
 }

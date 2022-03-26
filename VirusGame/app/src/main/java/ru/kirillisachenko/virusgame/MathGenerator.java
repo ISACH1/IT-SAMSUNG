@@ -15,7 +15,7 @@ public class MathGenerator {
     }
 
     public char getRandomSign() {
-        double a = getRandom(3, 0); // 1 2
+        double a = getRandom(3, 0);
         if (a == 1){
             return '+';
         } return '-';

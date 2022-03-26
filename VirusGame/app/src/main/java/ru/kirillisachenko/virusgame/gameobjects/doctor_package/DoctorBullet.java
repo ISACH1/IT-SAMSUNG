@@ -10,8 +10,10 @@ import ru.kirillisachenko.virusgame.R;
 import ru.kirillisachenko.virusgame.gameobjects.Bullet;
 
 public class DoctorBullet extends Bullet {
-    public DoctorBullet(float xPosition, float yPosition, float xSpeed, float ySpeed, float bulletSpeed, Context context) {
-        super(xPosition, yPosition, xSpeed, ySpeed, bulletSpeed, context);
+
+
+    public DoctorBullet(float xPosition, float yPosition, float xSpeed, float ySpeed, float bulletSpeed, Context context, double damage) {
+        super(xPosition, yPosition, xSpeed, ySpeed, bulletSpeed, context, damage);
         int type = mathGenerator.getRandom(4,0);
         switch (type){
             case (1):
@@ -25,5 +27,4 @@ public class DoctorBullet extends Bullet {
                 break;
         }
     }
-
 }
