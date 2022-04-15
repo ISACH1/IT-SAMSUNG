@@ -1,28 +1,22 @@
 package ru.kirillisachenko.virusgame.gameobjects.heropackage;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
-import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import ru.kirillisachenko.virusgame.GameDisplay;
 import ru.kirillisachenko.virusgame.MathGenerator;
-import ru.kirillisachenko.virusgame.R;
 import ru.kirillisachenko.virusgame.gamecontrollers.Joystick;
 import ru.kirillisachenko.virusgame.gameobjects.Boss;
 import ru.kirillisachenko.virusgame.gameobjects.Bullet;
 import ru.kirillisachenko.virusgame.gameobjects.Enemy;
 import ru.kirillisachenko.virusgame.gameobjects.GameObject;
+import ru.kirillisachenko.virusgame.gameobjects.heropackage.Classic.HeroBullet;
 
 public abstract class Hero extends GameObject {
-    MathGenerator mathGenerator;
-    Joystick joystick;
-    Context context;
-    protected   float bulletSpeed;
+    private final MathGenerator mathGenerator;
+    private final Joystick joystick;
+    protected float bulletSpeed;
     protected long lastCast;
     protected long AbilityKD;
     protected float maxAttackSpeed;
@@ -34,7 +28,6 @@ public abstract class Hero extends GameObject {
         super(xPosition, yPosition);
         this.joystick = joystick;
         mathGenerator = new MathGenerator();
-        this.context = context;
         lastAttack = 0;
         lastCast = 0;
         maxAttackSpeed = 500;
@@ -47,22 +40,22 @@ public abstract class Hero extends GameObject {
         yPosition += ySpeed;
     }
 
-    public Bullet attack(ArrayList<Enemy> enemies) {
+    public Bullet attack(ArrayList<Enemy> enemies, Context context) {
         GameObject target = findEnemy(enemies);
         float distance = mathGenerator.DeltaDistance(target.getxPosition(), xPosition, target.getyPosition(), yPosition);
         float bulletXSpeed = (target.getxPosition() - xPosition) / distance;
         float bulletYSpeed = (target.getyPosition() - yPosition) / distance;
         lastAttack = System.currentTimeMillis();
-        return new HeroBullet(xPosition, yPosition, bulletXSpeed, bulletYSpeed, bulletSpeed, context, damage);
+        return new HeroBullet(xPosition, yPosition, bulletXSpeed, bulletYSpeed, bulletSpeed, context, damage, this);
     }
 
-    public Bullet attackBoss(ArrayList<Boss> bosses) {
+    public Bullet attackBoss(ArrayList<Boss> bosses, Context context) {
         GameObject target = findEnemy(bosses);
         float distance = mathGenerator.DeltaDistance(target.getxPosition(), xPosition, target.getyPosition(), yPosition);
         float bulletXSpeed = (target.getxPosition() - xPosition) / distance;
         float bulletYSpeed = (target.getyPosition() - yPosition) / distance;
         lastAttack = System.currentTimeMillis();
-        return new HeroBullet(xPosition, yPosition, bulletXSpeed, bulletYSpeed, bulletSpeed, context, damage);
+        return new HeroBullet(xPosition, yPosition, bulletXSpeed, bulletYSpeed, bulletSpeed, context, damage, this);
     }
 
     protected GameObject findEnemy(ArrayList<Enemy> enemies){

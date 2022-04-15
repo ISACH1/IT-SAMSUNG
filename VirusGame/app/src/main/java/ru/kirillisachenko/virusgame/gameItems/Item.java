@@ -42,5 +42,7 @@ public abstract class Item {
         return NeedToRemove;
     }
 
-    public abstract void take();
+    public  void take(){
+        NeedToRemove = true;
+    }
 }

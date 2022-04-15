@@ -15,7 +15,7 @@ public class DamageUp extends Item{
 
     @Override
     public void take() {
+        super.take();
         hero.setDamage(hero.getDamage() + 0.5);
-        NeedToRemove = true;
     }
 }

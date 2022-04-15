@@ -11,7 +11,7 @@ import ru.kirillisachenko.virusgame.MathGenerator;
 import ru.kirillisachenko.virusgame.R;
 
 public class Room {
-    MathGenerator mathGenerator;
+    private MathGenerator mathGenerator;
     private Tile tiles [] [] = new Tile[100][100];
     private Bitmap tile1, tile2, tile3, tile4;
     public Room(float xPosition, float yPosition, Context context){

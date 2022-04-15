@@ -34,7 +34,7 @@ public class PaneDoctor extends Enemy {
 
 
     @Override
-    public Bullet attack() {
+    public Bullet attack(Context context) {
         float bulletXSpeed = getBulletXSpeed();
         float bulletYSpeed = getBulletYSpeed();
         lastAttack = System.currentTimeMillis();

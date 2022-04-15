@@ -14,7 +14,6 @@ import androidx.annotation.NonNull;
 import java.util.ArrayList;
 import java.util.ListIterator;
 
-import ru.kirillisachenko.virusgame.gameItems.HealthUp;
 import ru.kirillisachenko.virusgame.gameItems.Item;
 import ru.kirillisachenko.virusgame.gamecontrollers.Button;
 import ru.kirillisachenko.virusgame.gamecontrollers.EnemySpawner;
@@ -23,8 +22,9 @@ import ru.kirillisachenko.virusgame.gamecontrollers.Joystick;
 import ru.kirillisachenko.virusgame.gameobjects.Boss;
 import ru.kirillisachenko.virusgame.gameobjects.Bullet;
 import ru.kirillisachenko.virusgame.gameobjects.Enemy;
-import ru.kirillisachenko.virusgame.gameobjects.heropackage.ClassicVirus;
+import ru.kirillisachenko.virusgame.gameobjects.heropackage.Classic.ClassicVirus;
 import ru.kirillisachenko.virusgame.gameobjects.heropackage.Hero;
+import ru.kirillisachenko.virusgame.gameobjects.heropackage.Ninja.NinjaVirus;
 import ru.kirillisachenko.virusgame.map.Room;
 
 public class Game extends SurfaceView implements SurfaceHolder.Callback {
@@ -32,7 +32,6 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
     private Button AutoFireButton, AbilityButton;
     private Room room;
     private GameDisplay gameDisplay;
-    private MathGenerator mathGenerator;
     private SurfaceHolder holder;
     private Hero hero;
     private Joystick joystick1;
@@ -47,33 +46,62 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
     private int autoFireButtonPointerID = 0;
     private int AbilityButtonID = 0;
     private  int TouchCount = 0;
+    private int type;
 
-    public Game(Context context) {
+    public Game(Context context, int type) {
         super(context);
         getHolder().addCallback(this);
+        this.type = type;
     }
 
     @Override
     public void surfaceCreated(@NonNull SurfaceHolder holder) {
-        mathGenerator = new MathGenerator();
+        Log.d("SASASA", String.valueOf(type));
+        setGameControllers();
+        setHero();
+        setArrayLists();
+        setEnemySpawner();
+        this.holder = holder;
+        setGameDisplay();
+        gameThread = new GameThread();
+        gameThread.start();
+    }
+
+    public void setEnemySpawner(){
+        enemySpawner = new EnemySpawner(enemyArrayList, getContext(), hero, boss, enemyBullets);
+    }
+
+    public void setHero(){
+        switch (type){
+            case (0):
+                hero = new ClassicVirus(getContext(), room.getXPoint(50, 50), room.getYPoint(50, 50), joystick1);
+                break;
+            case (1):
+                hero = new NinjaVirus(getContext(), room.getXPoint(50, 50), room.getYPoint(50, 50), joystick1);
+                break;
+        }
+        healthBar = new HealthBar(0, 0, getContext(), hero);
+    }
+
+    public void setGameControllers(){
         room = new Room(getWidth(), getHeight(), getContext());
         joystick1 = new Joystick( getWidth() - (getWidth() - 250), getHeight() - 225, 175, 200, getContext());
         AutoFireButton = new Button(getWidth() - 400, getHeight() - 150, 185, getContext(), 0);
         AbilityButton = new Button(getWidth() - 200, getHeight() - 300, 185, getContext(), 1) ;
-        hero = new ClassicVirus(getContext(), room.getXPoint(50, 50), room.getYPoint(50, 50), joystick1);
-         healthBar = new HealthBar(0, 0, getContext(), hero);
-         boss = new ArrayList<>();
+    }
+
+    public void setGameDisplay(){
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        ((Activity) getContext()).getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        gameDisplay = new GameDisplay(displayMetrics.widthPixels, displayMetrics.heightPixels, hero);
+    }
+
+    public void setArrayLists(){
+        boss = new ArrayList<>();
         enemyArrayList = new ArrayList<>();
         heroBullets = new ArrayList<>();
         enemyBullets = new ArrayList<>();
         itemArrayList = new ArrayList<>();
-         enemySpawner = new EnemySpawner(enemyArrayList, getContext(), hero, boss, enemyBullets);
-        this.holder = holder;
-        DisplayMetrics displayMetrics = new DisplayMetrics();
-        ((Activity) getContext()).getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-        gameDisplay = new GameDisplay(displayMetrics.widthPixels, displayMetrics.heightPixels, hero);
-        gameThread = new GameThread();
-        gameThread.start();
     }
 
 
@@ -203,10 +231,10 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
         if (AutoFireButton.isPressed()){
             if(hero.canAttack()) {
                 if (!enemyArrayList.isEmpty()){
-                heroBullets.add(hero.attack(enemyArrayList));
+                heroBullets.add(hero.attack(enemyArrayList, getContext()));
                 }
                 if(!boss.isEmpty()){
-                    heroBullets.add(hero.attackBoss(boss));
+                    heroBullets.add(hero.attackBoss(boss, getContext()));
                 }
             }
         }
@@ -228,7 +256,7 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
         for (Enemy e: enemyArrayList){
             e.update();
             if (e.canAttack()){
-                enemyBullets.add(e.attack());
+                enemyBullets.add(e.attack(getContext()));
             }
 
         }
@@ -246,8 +274,8 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
         while (EnemyListIterator.hasNext()){
             Enemy enemy = EnemyListIterator.next();
             if (enemy.getHealthPoint() == 0){
-                if(enemy.die() != null){
-                    itemArrayList.add(enemy.die());
+                if(enemy.die(getContext()) != null){
+                    itemArrayList.add(enemy.die(getContext()));
                 }
                 enemyArrayList.remove(enemy);
             }
@@ -266,7 +294,7 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
             Boss boss1 = BossIterator.next();
             if (boss1.getHealthPoint() == 0){
                 boss.remove(boss1);
-                itemArrayList.add(boss1.die());
+                itemArrayList.add(boss1.die(getContext()));
             }
             ListIterator<Bullet> HeroBulletIterator = heroBullets.listIterator();
             while (HeroBulletIterator.hasNext()){

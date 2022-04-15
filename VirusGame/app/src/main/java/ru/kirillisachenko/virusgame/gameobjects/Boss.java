@@ -9,6 +9,7 @@ import ru.kirillisachenko.virusgame.gameobjects.heropackage.Hero;
 public abstract class Boss extends Enemy {
 
     protected ArrayList<Bullet> bullets;
+    protected Context context;
 
     public Boss(float xPosition, float yPosition, Context context, Hero hero,ArrayList<Bullet> bullets, boolean dropItem) {
         super(xPosition, yPosition, context, hero, dropItem);
@@ -17,7 +18,7 @@ public abstract class Boss extends Enemy {
 
 
     @Override
-    public Bullet attack() {
+    public Bullet attack(Context context) {
         return null;
     }
 

@@ -3,7 +3,14 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/IT/ANDROID/VirusGame/app/src/main/res/drawable/ninja_state.xml" value="0.2905" />
+        <entry key="..\:/IT/ANDROID/VirusGame/app/src/main/res/drawable/virus_state.xml" value="0.2905" />
+        <entry key="..\:/IT/ANDROID/VirusGame/app/src/main/res/layout/activity_choose_hero.xml" value="0.1" />
         <entry key="..\:/IT/ANDROID/VirusGame/app/src/main/res/layout/activity_main.xml" value="0.22" />
+        <entry key="..\:/IT/ANDROID/VirusGame/app/src/main/res/layout/activity_settings.xml" value="0.4466666666666667" />
+        <entry key="..\:/IT/ANDROID/VirusGame/app/src/main/res/layout/carousel_hero.xml" value="0.2734375" />
+        <entry key="..\:/IT/ANDROID/VirusGame/app/src/main/res/layout/hero_choose_fragment.xml" value="0.2734375" />
+        <entry key="..\:/IT/ANDROID/VirusGame/app/src/main/res/layout/ninja_state_anim.xml" value="0.3421875" />
       </map>
     </option>
   </component>

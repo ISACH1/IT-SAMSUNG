@@ -16,7 +16,6 @@ import ru.kirillisachenko.virusgame.gameobjects.heropackage.Hero;
 public abstract class Enemy extends GameObject{
     protected MathGenerator mathGenerator;
     protected  Hero hero;
-    protected  Context context;
     protected float attackRange;
     protected float minDistance;
     protected boolean dropItem;
@@ -24,7 +23,6 @@ public abstract class Enemy extends GameObject{
     public Enemy(float xPosition, float yPosition, Context context, Hero hero, boolean dropItem) {
         super(xPosition, yPosition);
         this.hero = hero;
-        this.context = context;
         armor = 0;
         this.dropItem = dropItem;
         mathGenerator = new MathGenerator();
@@ -49,7 +47,7 @@ public abstract class Enemy extends GameObject{
         xPosition += xSpeed;
         yPosition += ySpeed;
     }
-    public abstract Bullet attack();
+    public abstract Bullet attack(Context context);
 
     @Override
     public boolean canAttack() {
@@ -76,7 +74,7 @@ public abstract class Enemy extends GameObject{
         }
     }
 
-    public Item die(){
+    public Item die(Context context){
         if(dropItem) {
             int type = mathGenerator.getRandom(4, 0);
             switch (type){

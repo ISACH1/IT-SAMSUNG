@@ -7,14 +7,14 @@ import ru.kirillisachenko.virusgame.GameDisplay;
 import ru.kirillisachenko.virusgame.MathGenerator;
 
 public abstract class GameObject {
-    MathGenerator mathGenerator;
+    protected MathGenerator mathGenerator;
     protected   float xPosition;
     protected float yPosition;
     protected double healthPoint;
     protected double maxHealthPoint;
    protected   long lastAttack  = 0;
    protected   long  attackSpeed ;
-    protected Bitmap Model [];
+    protected Bitmap[] Model;
     protected float xSpeed, ySpeed;
     protected   float speed;
     protected int armor;

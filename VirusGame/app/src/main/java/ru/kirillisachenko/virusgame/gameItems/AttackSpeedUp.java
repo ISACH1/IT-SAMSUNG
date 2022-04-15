@@ -15,7 +15,7 @@ public class AttackSpeedUp extends Item{
 
     @Override
     public void take() {
+        super.take();
         hero.setAttackSpeed((long) (hero.getAttackSpeed() - hero.getAttackSpeed()*0.1));
-        NeedToRemove = true;
     }
 }

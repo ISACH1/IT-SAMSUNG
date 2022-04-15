@@ -17,8 +17,8 @@ public class HealthUp extends Item{
 
     @Override
     public void take() {
+        super.take();
         hero.setMaxHealthPoint(hero.getMaxHealthPoint() + 1);
         hero.setHealthPoint(hero.getHealthPoint() + 1);
-        NeedToRemove = true;
     }
 }
