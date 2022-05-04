@@ -1,8 +1,0 @@
-<resources>
-    <string name="app_name">VirusGame</string>
-    <string name="Play_Rus">Играть</string>
-    <string name="Settings_Rus">Настройки</string>
-    <string name="Exit_Rus">Выход</string>
-    <string name="Back_Rus">Назад</string>
-    <string name="Choose_Rus">Выбрать</string>
-</resources>
