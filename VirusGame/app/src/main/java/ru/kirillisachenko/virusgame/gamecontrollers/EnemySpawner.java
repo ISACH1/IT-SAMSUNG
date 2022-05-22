@@ -17,7 +17,7 @@ public class EnemySpawner {
     private MathGenerator mathGenerator;
     private ArrayList<Enemy> enemyArrayList;
     private ArrayList<Boss> bosses;
-    private int waveNumber = 4;
+    private int waveNumber = 1;
     private int BossWaveNumber = 1;
     private int numberOfBosses = 1;
     private int numberOfEnemies = 4;

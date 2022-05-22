@@ -4,7 +4,10 @@ import android.app.Activity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Rect;
 import android.util.DisplayMetrics;
 
 import android.util.Log;
@@ -32,6 +35,7 @@ import ru.kirillisachenko.virusgame.gameobjects.heropackage.Ninja.NinjaVirus;
 import ru.kirillisachenko.virusgame.map.Room;
 
 public class Game extends SurfaceView implements SurfaceHolder.Callback {
+    private Bitmap map;
     private SurfaceHolder holder;
     private HealthBar healthBar;
     private Button AutoFireButton, AbilityButton;
@@ -51,6 +55,7 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
     private int AbilityButtonID = 0;
     private int TouchCount = 0;
     private final int type;
+    private final int fps = 60;
 
     public Game(Context context, int type) {
         super(context);
@@ -66,21 +71,22 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
         this.holder = holder;
         setGameDisplay();
         setEnemySpawner();
+        map = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(getContext().getResources(), R.drawable.back), 10000, 10000, false);
         gameThread = new GameThread();
         gameThread.start();
     }
 
     public void setEnemySpawner() {
-        enemySpawner = new EnemySpawner(enemyArrayList, getContext(), hero, boss, enemyBullets, getWidth() / 13, getWidth() / 3, (float) getWidth()/4);
+        enemySpawner = new EnemySpawner(enemyArrayList, getContext(), hero, boss, enemyBullets, getWidth() / 13, getWidth() / 3, (float) getWidth()/5);
     }
 
     public void setHero() {
         switch (type) {
             case (0):
-                hero = new ClassicVirus(getContext(), room.getXPoint(50, 50), room.getYPoint(50, 50), getWidth() / 13, joystick1);
+                hero = new ClassicVirus(getContext(), 0, 0, getWidth() / 13, joystick1);
                 break;
             case (1):
-                hero = new NinjaVirus(getContext(), room.getXPoint(50, 50), room.getYPoint(50, 50), getWidth() / 13, joystick1);
+                hero = new NinjaVirus(getContext(), 0, 0, getWidth() / 13, joystick1);
                 break;
         }
         healthBar = new HealthBar(0, 0, getWidth() / 20, getContext(), hero);
@@ -193,11 +199,16 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
             while (running) {
                 Canvas canvas = holder.lockCanvas();
                 try {
+                    Thread.sleep(1000/fps);
                     drawFrames(canvas, gameDisplay);
                     update();
                 } catch (Exception e) {
                 } finally {
-                    holder.unlockCanvasAndPost(canvas);
+                    try {
+                        holder.unlockCanvasAndPost(canvas);
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }
                 }
             }
         }
@@ -307,6 +318,7 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
 
     public void drawFrames(Canvas canvas, GameDisplay gameDisplay) {
         room.draw(canvas, gameDisplay);
+        canvas.drawBitmap(map, gameDisplay.gameToDisplayCoordinatesX(0), gameDisplay.gameToDisplayCoordinatesY(0), null);
         hero.draw(canvas, gameDisplay);
         for (Enemy e : enemyArrayList) {
             e.draw(canvas, gameDisplay);

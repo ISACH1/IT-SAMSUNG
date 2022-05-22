@@ -46,11 +46,6 @@ public class Room {
 
     public void draw(Canvas canvas, GameDisplay gameDisplay) {
         canvas.drawColor(Color.BLACK);
-        for (int i = 0; i < 100; i++) {
-            for (int j = 0; j < 100; j++) {
-                tiles[i][j].draw(canvas, gameDisplay);
-            }
-        }
     }
 
 

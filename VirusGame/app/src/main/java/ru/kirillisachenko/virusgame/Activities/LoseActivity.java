@@ -62,8 +62,8 @@ public class LoseActivity extends AppCompatActivity {
                 if (i < HighestScore[0]) r.writeScore(HighestScore[0]);
             }
             Toast.makeText(this, "Загрузка завершена", Toast.LENGTH_SHORT).show();
+            scoreDataStorage.saveData(HighestScore[0]);
         });
-        scoreDataStorage.saveData(HighestScore[0]);
         setButtons();
     }
 
